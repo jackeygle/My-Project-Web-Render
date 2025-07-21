@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI & Robotics Portfolio - Network Crawler</title>
+  <meta name="description" content="我的作品集，展示人工智能与机器人学项目。">
+  <meta name="keywords" content="作品集, AI, 人工智能, 机器人学, 深度学习, 神经网络, 计算机视觉">
+  <meta name="author" content="Jackeygle">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --dark-color: #050810;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Electrolize', sans-serif;
+      color: var(--primary-color);
+      overflow: hidden;
+      background-color: var(--dark-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    #neural-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      cursor: none; /* 隐藏默认光标，用canvas绘制自定义光标 */
+    }
+    .content {
+      text-align: center;
+      z-index: 1;
+      padding: 2.5rem;
+      position: relative;
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      background: rgba(5, 8, 16, 0.75);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 50px rgba(0, 221, 255, 0.1);
+    }
+    .content::before, .content::after {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        border-color: var(--primary-color);
+        border-style: solid;
+        animation: border-flicker 4s infinite alternate;
+    }
+    .content::before { top: -6px; left: -6px; border-width: 2px 0 0 2px; }
+    .content::after { bottom: -6px; right: -6px; border-width: 0 2px 2px 0; }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 8px var(--primary-color), 0 0 16px var(--primary-color);
+    }
+    p { text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; }
+    .btn-container { margin-top: 2rem; }
+    .btn-futuristic {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      padding: 15px 30px;
+      color: var(--primary-color);
+      background-color: transparent;
+      border: 2px solid var(--primary-color);
+      text-transform: uppercase;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+    .btn-futuristic:hover {
+        color: var(--dark-color);
+        background-color: var(--primary-color);
+        box-shadow: 0 0 30px var(--primary-color);
+    }
+    @keyframes border-flicker {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="neural-canvas"></canvas>
+
+  <div class="content">
+    <h1>Autonomous Agent</h1>
+    <p>Navigating Digital Ecosystems</p>
+    <div class="btn-container">
+        <a href="projects.html" class="btn-futuristic">Access Logs</a>
+        <a href="philosophy.html" class="btn-futuristic" style="margin-left: 1rem;">Digital Thoughts</a>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const mouse = { x: undefined, y: undefined, radius: 100 };
+    const NODE_COUNT = (canvas.width * canvas.height) / 10000;
+    const CONNECTION_RADIUS = 200;
+    
+    let nodes = [];
+
+    // --- 升级版机器人🤖 类 ---
+    class Robot {
+        constructor() {
+            this.size = 8; // 身体半径
+            this.currentNode = null;
+            this.targetNode = null;
+            this.previousNode = null;
+            this.progress = 0; // 0 到 1 的移动进度
+            this.speed = 0.005; // 移动速度
+            this.walkCycle = 0;
+            this.x = 0;
+            this.y = 0;
+        }
+
+        findNewTarget() {
+            this.previousNode = this.currentNode;
+            // 查找所有邻居节点，排除刚离开的节点
+            const neighbors = nodes.filter(node => {
+                if (node === this.currentNode || node === this.previousNode) return false;
+                const dist = Math.hypot(this.currentNode.x - node.x, this.currentNode.y - node.y);
+                return dist < CONNECTION_RADIUS;
+            });
+
+            if (neighbors.length > 0) {
+                // 从有效的邻居中随机选一个作为新目标
+                this.targetNode = neighbors[Math.floor(Math.random() * neighbors.length)];
+            } else {
+                // 如果没有其他邻居，就从所有节点里随机选一个（防止卡死）
+                this.targetNode = nodes.filter(n => n !== this.currentNode)[Math.floor(Math.random() * (nodes.length - 1))];
+            }
+        }
+        
+        init() {
+            // 随机选择一个起始节点
+            this.currentNode = nodes[Math.floor(Math.random() * nodes.length)];
+            this.findNewTarget();
+            this.x = this.currentNode.x;
+            this.y = this.currentNode.y;
+        }
+
+        update() {
+            if (!this.currentNode || !this.targetNode) return;
+
+            this.progress += this.speed;
+            this.walkCycle += 0.2; // 步进动画循环
+
+            // 线性插值计算当前位置
+            const dx = this.targetNode.x - this.currentNode.x;
+            const dy = this.targetNode.y - this.currentNode.y;
+            this.x = this.currentNode.x + dx * this.progress;
+            this.y = this.currentNode.y + dy * this.progress;
+
+            // 到达目标后，重置进度并寻找新目标
+            if (this.progress >= 1) {
+                this.progress = 0;
+                this.currentNode = this.targetNode;
+                this.findNewTarget();
+            }
+        }
+
+        draw() {
+            if (!this.currentNode || !this.targetNode) return;
+            
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
+            // 计算朝向并旋转画布
+            const angle = Math.atan2(this.targetNode.y - this.currentNode.y, this.targetNode.x - this.currentNode.x);
+            ctx.rotate(angle);
+
+            const legAngle1 = Math.sin(this.walkCycle) * (Math.PI / 4);
+            const legAngle2 = Math.sin(this.walkCycle + Math.PI) * (Math.PI / 4);
+
+            // 绘制四条节肢，前后两对，交替摆动
+            this.drawLeg(legAngle1, -this.size / 2);
+            this.drawLeg(legAngle2, this.size / 2);
+            this.drawLeg(legAngle2, -this.size / 2, true);
+            this.drawLeg(legAngle1, this.size / 2, true);
+
+            // 绘制身体
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = '#333';
+            ctx.strokeStyle = '#555';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            // 绘制发光的“眼睛”
+            ctx.beginPath();
+            ctx.arc(this.size * 0.4, 0, this.size / 3, 0, Math.PI * 2);
+            ctx.fillStyle = 'var(--primary-color)';
+            ctx.shadowColor = 'var(--primary-color)';
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0; // 关闭阴影，避免影响其他元素
+            
+            ctx.restore();
+        }
+
+        drawLeg(angle, yOffset, isBack = false) {
+            ctx.strokeStyle = isBack ? '#777' : '#aaa';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, yOffset); // 从身体侧面开始
+            const kneeX = Math.cos(angle) * this.size * 1.5;
+            const kneeY = yOffset + Math.sin(angle) * this.size * 1.5;
+            ctx.lineTo(kneeX, kneeY); // 画到“膝盖”
+            ctx.lineTo(kneeX, kneeY + this.size * 1.2); // 画“小腿”
+            ctx.stroke();
+        }
+    }
+
+    class Node {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.radius = Math.random() * 1.5 + 1;
+      }
+      update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 221, 255, 0.5)';
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      nodes = [];
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push(new Node());
+      }
+      robot.init(); // 初始化机器人
+    }
+    
+    const robot = new Robot(); // 实例化机器人
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // 绘制神经网络连接线
+      for(let i = 0; i < nodes.length; i++) {
+          for(let j = i; j < nodes.length; j++) {
+              const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+              if (dist < CONNECTION_RADIUS) {
+                  ctx.beginPath();
+                  ctx.moveTo(nodes[i].x, nodes[i].y);
+                  ctx.lineTo(nodes[j].x, nodes[j].y);
+                  ctx.strokeStyle = `rgba(0, 221, 255, ${0.5 - dist / CONNECTION_RADIUS})`;
+                  ctx.stroke();
+              }
+          }
+      }
+
+      // 更新和绘制节点
+      nodes.forEach(node => { node.update(); node.draw(); });
+      
+      // 更新和绘制机器人
+      robot.update();
+      robot.draw();
+
+      // 绘制自定义的鼠标光标
+      if (mouse.x) {
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+          const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+          gradient.addColorStop(0, 'rgba(0, 221, 255, 0.2)');
+          gradient.addColorStop(1, 'rgba(0, 221, 255, 0)');
+          ctx.fillStyle = gradient;
+          ctx.fill();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+
+    init();
+    animate();
+  </script>
+</body>
+</html>

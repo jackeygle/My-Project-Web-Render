@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Mainframe</title>
+  <meta name="description" content="我的作品集，展示机器人学和深度学习项目。">
+  <meta name="keywords" content="作品集, 机器人学, 深度学习, AI, 项目">
+  <meta name="author" content="Jackeygle">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --dark-color: #050810;
+    }
+
+    body {
+      font-family: 'Electrolize', sans-serif;
+      background-color: var(--dark-color);
+      color: #ccc;
+      padding-top: 6rem;
+      min-height: 100vh;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 221, 255, 0.05) 1px, rgba(0, 221, 255, 0.05) 2px),
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0, 221, 255, 0.05) 1px, rgba(0, 221, 255, 0.05) 2px);
+      background-size: 50px 50px;
+    }
+
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.2);
+    }
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff;
+      text-shadow: 0 0 15px var(--primary-color);
+      text-transform: uppercase;
+    }
+
+    /* 搜索框样式 */
+    .search-wrapper {
+        position: relative;
+    }
+    #searchInput {
+        background: transparent;
+        border: 1px solid rgba(0, 221, 255, 0.4);
+        color: #fff;
+        padding-left: 2.5rem;
+        font-size: 1.1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    #searchInput:focus {
+        background: rgba(0, 221, 255, 0.05);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 15px rgba(0, 221, 255, 0.5);
+        color: #fff;
+    }
+    #searchInput::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .search-wrapper .fa-search {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(0, 221, 255, 0.6);
+    }
+
+    /* 项目卡片样式 */
+    .project-card {
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      background: linear-gradient(145deg, rgba(0, 221, 255, 0.05), rgba(0, 221, 255, 0.1));
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .project-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary-color);
+      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.2);
+    }
+    
+    /* HUD 装饰角 */
+    .project-card::before, .project-card::after {
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        border-color: var(--primary-color);
+        border-style: solid;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .project-card::before { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+    .project-card::after { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+    .project-card:hover::before, .project-card:hover::after {
+        opacity: 1;
+    }
+    
+    .project-img-wrapper {
+        overflow: hidden;
+        position: relative;
+    }
+    .project-img {
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-img {
+      transform: scale(1.1);
+    }
+
+    /* 图像扫描线遮罩 */
+    .project-img-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(rgba(5, 8, 16, 0.4), rgba(5, 8, 16, 0.4)),
+                    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 221, 255, 0.1) 2px, rgba(0, 221, 255, 0.1) 4px);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    .project-card:hover .project-img-wrapper::after {
+        opacity: 1;
+    }
+
+    /* 视频叠加层样式 */
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: rgba(5, 8, 16, 0.7);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 2;
+    }
+    .project-card:hover .video-overlay {
+        opacity: 1;
+    }
+    
+    .video-play-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        border: none;
+        color: var(--dark-color);
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(0, 221, 255, 0.5);
+    }
+    .video-play-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(0, 221, 255, 0.8);
+    }
+    
+    .video-label {
+        color: #fff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 12px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        letter-spacing: 1px;
+    }
+
+    /* 视频模态框样式 */
+    .video-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(5px);
+    }
+    .video-modal-content {
+        position: relative;
+        margin: 5% auto;
+        width: 90%;
+        max-width: 800px;
+        background: var(--dark-color);
+        border: 1px solid var(--primary-color);
+        box-shadow: 0 0 50px rgba(0, 221, 255, 0.3);
+    }
+    .video-modal video {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .close-video {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: #fff;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: 'Orbitron', sans-serif;
+        transition: color 0.3s;
+    }
+    .close-video:hover {
+        color: var(--primary-color);
+    }
+
+    .card-body { color: #ccc; }
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      transition: color 0.3s;
+    }
+    .card-text { font-size: 0.9rem; line-height: 1.6; }
+    .project-card:hover .card-title { color: var(--primary-color); }
+    
+    .btn-view-details {
+      font-family: 'Orbitron', sans-serif;
+      background: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.5rem 1.5rem;
+      text-transform: uppercase;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+    .btn-view-details:hover {
+      background-color: var(--primary-color);
+      color: var(--dark-color);
+      box-shadow: 0 0 20px var(--primary-color);
+    }
+
+    footer {
+        border-top: 1px solid rgba(0, 221, 255, 0.2);
+        color: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">[ Mainframe // Jackeygle ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Return Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Digital Thoughts</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" id="projects">
+    <h1 class="text-center mb-5">Project Archives</h1>
+    <div class="search-wrapper mb-5">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" class="form-control" placeholder="Initiate search query...">
+    </div>
+    <div class="row project-list">
+      <!-- 机器人学项目 -->
+      <div class="col-lg-6 project-item" data-aos="fade-up">
+        <div class="card project-card">
+          <div class="project-img-wrapper">
+             <img src="static/images/robotics.png" class="card-img-top project-img" alt="DD2410-Introduction to Robotics Project" loading="lazy">
+             <!-- 视频播放按钮叠加层 -->
+             <div class="video-overlay">
+               <button class="video-play-btn" onclick="openVideoModal()">
+                 <i class="fas fa-play"></i>
+               </button>
+               <span class="video-label">Demo Video</span>
+             </div>
+          </div>
+          <div class="card-body p-4">
+            <h5 class="card-title mb-3">DD2410-Introduction to Robotics Project</h5>
+            <p class="card-text mb-4">Introductory robotics course project covering core concepts including robot kinematics, dynamics, path planning, and control systems. Combines theoretical learning with practical programming to master fundamental knowledge of modern robotics technology.</p>
+            <a href="https://github.com/jackeygle/DD2410-Introduction-to-Robotics" class="btn btn-view-details" target="_blank">
+              <i class="fas fa-arrow-right me-2"></i>Access Data
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 深度学习项目 -->
+      <div class="col-lg-6 project-item" data-aos="fade-up">
+        <div class="card project-card">
+          <div class="project-img-wrapper">
+             <img src="static/images/deeplearing.jpg" class="card-img-top project-img" alt="DD2424-Deep Learning in Data Science" loading="lazy">
+          </div>
+          <div class="card-body p-4">
+            <h5 class="card-title mb-3">DD2424-Deep Learning in Data Science</h5>
+            <p class="card-text mb-4">Deep learning applications in data science project, exploring cutting-edge technologies including neural network architectures, optimization algorithms, and regularization techniques. Implements a complete learning path from basic perceptrons to complex convolutional neural networks.</p>
+            <a href="https://github.com/jackeygle/DD2424-Deep-Learning-in-Data-Dcience" class="btn btn-view-details" target="_blank">
+              <i class="fas fa-arrow-right me-2"></i>Access Data
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 视频模态框 -->
+  <div id="videoModal" class="video-modal">
+    <div class="video-modal-content">
+      <span class="close-video" onclick="closeVideoModal()">&times;</span>
+      <video id="modalVideo" controls>
+        <source src="https://firebasestorage.googleapis.com/v0/b/jackeysproject.firebasestorage.app/o/project_video.mp4?alt=media&token=5fcf37e9-4518-4bfc-b251-bd34040d8fee" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <footer class="text-center py-4 mt-5">
+    <p>© 2025 Jackeygle // System All Rights Reserved</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true, offset: 50 });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      document.querySelectorAll('.project-item').forEach(item => {
+        const card = item.querySelector('.project-card');
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const desc = card.querySelector('.card-text').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // 视频模态框功能
+    function openVideoModal() {
+      const modal = document.getElementById('videoModal');
+      const video = document.getElementById('modalVideo');
+      modal.style.display = 'block';
+      // 防止背景滚动
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      const video = document.getElementById('modalVideo');
+      modal.style.display = 'none';
+      video.pause(); // 暂停视频
+      video.currentTime = 0; // 重置到开头
+      // 恢复背景滚动
+      document.body.style.overflow = 'auto';
+    }
+
+    // 点击模态框外部关闭
+    window.onclick = function(event) {
+      const modal = document.getElementById('videoModal');
+      if (event.target === modal) {
+        closeVideoModal();
+      }
+    }
+
+    // ESC键关闭模态框
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeVideoModal();
+      }
+    });
+  </script>
+</body>
+</html>
