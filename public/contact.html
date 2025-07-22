@@ -754,15 +754,21 @@
       
       const submitBtn = this.querySelector('.btn-submit');
       const originalText = submitBtn.innerHTML;
+      const name = this.querySelector('input[type="text"]').value;
+      const email = this.querySelector('input[type="email"]').value;
+      const message = this.querySelector('textarea').value;
       
       // Show loading state
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
       submitBtn.disabled = true;
       
-      // Simulate form submission (replace with actual form handling)
+      // Since this is a static website, we'll show a realistic message
       setTimeout(() => {
-        submitBtn.innerHTML = '<i class="fas fa-check me-2"></i>Message Sent!';
-        submitBtn.style.background = 'linear-gradient(45deg, var(--accent-color), var(--primary-color))';
+        submitBtn.innerHTML = '<i class="fas fa-info-circle me-2"></i>Demo Mode';
+        submitBtn.style.background = 'linear-gradient(45deg, #ffa500, #ff6b35)';
+        
+        // Show user-friendly message
+        alert(`Demo Mode: This is a portfolio demonstration.\n\nTo actually contact me, please email directly:\n📧 jackeygle@gmail.com\n\nYour message preview:\nName: ${name}\nEmail: ${email}\nMessage: ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`);
         
         // Reset form
         this.reset();
@@ -772,8 +778,8 @@
           submitBtn.innerHTML = originalText;
           submitBtn.disabled = false;
           submitBtn.style.background = '';
-        }, 3000);
-      }, 2000);
+        }, 4000);
+      }, 1500);
     });
 
     // Form field focus effects
