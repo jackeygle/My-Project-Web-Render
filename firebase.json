@@ -5,6 +5,30 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.pdf",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/pdf"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "inline"
+          }
+        ]
+      }
     ]
+  },
+  "storage": {
+    "rules": "storage.rules",
+    "cors": {
+      "origin": ["*"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600,
+      "responseHeader": ["Content-Type", "Content-Disposition"]
+    }
   }
 }

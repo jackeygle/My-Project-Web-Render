@@ -6,7 +6,9 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
-      allow read, write: if false;
+      allow read: if request.resource.contentType == 'application/pdf' 
+                  || request.resource.contentType == 'application/octet-stream';
+      allow write: if false;
     }
   }
 }
