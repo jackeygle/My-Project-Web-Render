@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conway's Game of Life - Cellular Automata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ddff;
+            --secondary-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --dark-color: #050810;
+            --neural-pulse: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .game-container {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .game-area {
+            background: rgba(5, 8, 16, 0.8);
+            border: 2px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+        }
+
+        #life-canvas {
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            display: block;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(0, 255, 136, 0.3));
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .algorithm-section {
+            background: rgba(5, 8, 16, 0.8);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .algorithm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="game-navbar">
+        <div class="game-title">🔄 Conway's Game of Life</div>
+        <div class="nav-buttons">
+            <a href="games.html" class="nav-btn"><i class="fas fa-arrow-left"></i> Back to Games</a>
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <div class="game-header">
+            <span class="game-icon">🔄</span>
+            <h1 class="game-name">Conway's Game of Life</h1>
+            <p class="game-description">
+                A classic cellular automaton where simple rules create complex, emergent patterns. 
+                Each cell lives or dies based on its neighbors, creating mesmerizing visual effects.
+            </p>
+        </div>
+
+        <div class="game-area">
+            <div id="life-canvas"></div>
+            <div class="game-controls">
+                <button class="control-btn" onclick="lifeGame.start()">Start</button>
+                <button class="control-btn" onclick="lifeGame.pause()">Pause</button>
+                <button class="control-btn" onclick="lifeGame.randomize()">Random</button>
+                <button class="control-btn" onclick="lifeGame.loadPattern('glider')">Glider</button>
+                <button class="control-btn" onclick="lifeGame.loadPattern('oscillator')">Oscillator</button>
+            </div>
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="life-gen">0</span>
+                    <span class="stat-label">Generation</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="life-alive">0</span>
+                    <span class="stat-label">Alive Cells</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="life-pattern">Random</span>
+                    <span class="stat-label">Pattern</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-section">
+             <h2 class="algorithm-title">Cellular Automaton Rules</h2>
+             <p>The Game of Life is a zero-player game, meaning its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves.</p>
+             <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+                <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+                <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+                <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+             </ul>
+        </div>
+    </div>
+
+    <script>
+    class ConwayLife {
+      constructor() {
+        this.canvas = document.getElementById('life-canvas');
+        this.cellSize = 10;
+        this.cols = Math.floor(this.canvas.offsetWidth / this.cellSize);
+        this.rows = Math.floor(this.canvas.offsetHeight / this.cellSize);
+        this.grid = this.createGrid();
+        this.isRunning = false;
+        this.generation = 0;
+        this.gameLoop = null;
+        this.speed = 100;
+        this.randomize();
+        this.draw();
+      }
+
+      createGrid() {
+        return Array(this.rows).fill().map(() => Array(this.cols).fill(false));
+      }
+
+      randomize() {
+        for (let y = 0; y < this.rows; y++) {
+          for (let x = 0; x < this.cols; x++) {
+            this.grid[y][x] = Math.random() > 0.75;
+          }
+        }
+        this.generation = 0;
+        this.updateDisplay();
+        this.draw();
+        document.getElementById('life-pattern').textContent = 'Random';
+      }
+
+      loadPattern(patternName) {
+        this.grid = this.createGrid();
+        const centerX = Math.floor(this.cols / 2);
+        const centerY = Math.floor(this.rows / 2);
+        let pattern;
+        switch (patternName) {
+          case 'glider':
+            pattern = [[0, 1, 0], [0, 0, 1], [1, 1, 1]];
+            break;
+          case 'oscillator':
+            pattern = [[1, 1, 1]];
+            break;
+        }
+        this.placePattern(pattern, centerX, centerY);
+        this.generation = 0;
+        this.updateDisplay();
+        this.draw();
+        document.getElementById('life-pattern').textContent = patternName.charAt(0).toUpperCase() + patternName.slice(1);
+      }
+      
+      placePattern(pattern, startX, startY) {
+        for (let y = 0; y < pattern.length; y++) {
+          for (let x = 0; x < pattern[y].length; x++) {
+            const gridX = startX + x - Math.floor(pattern[0].length / 2);
+            const gridY = startY + y - Math.floor(pattern.length / 2);
+            if (gridX >= 0 && gridX < this.cols && gridY >= 0 && gridY < this.rows) {
+              this.grid[gridY][gridX] = pattern[y][x] === 1;
+            }
+          }
+        }
+      }
+
+      countNeighbors(x, y) {
+        let count = 0;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const nx = (x + dx + this.cols) % this.cols;
+            const ny = (y + dy + this.rows) % this.rows;
+            if (this.grid[ny][nx]) count++;
+          }
+        }
+        return count;
+      }
+
+      nextGeneration() {
+        const newGrid = this.createGrid();
+        for (let y = 0; y < this.rows; y++) {
+          for (let x = 0; x < this.cols; x++) {
+            const neighbors = this.countNeighbors(x, y);
+            const isAlive = this.grid[y][x];
+            if (isAlive && (neighbors === 2 || neighbors === 3)) {
+              newGrid[y][x] = true;
+            } else if (!isAlive && neighbors === 3) {
+              newGrid[y][x] = true;
+            }
+          }
+        }
+        this.grid = newGrid;
+        this.generation++;
+        this.updateDisplay();
+      }
+
+      updateDisplay() {
+        const aliveCount = this.grid.flat().filter(cell => cell).length;
+        document.getElementById('life-gen').textContent = this.generation;
+        document.getElementById('life-alive').textContent = aliveCount;
+      }
+
+      draw() {
+        this.canvas.innerHTML = '';
+        this.canvas.style.position = 'relative';
+        this.canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+        for (let y = 0; y < this.rows; y++) {
+          for (let x = 0; x < this.cols; x++) {
+            const cell = document.createElement('div');
+            cell.style.position = 'absolute';
+            cell.style.left = `${x * this.cellSize}px`;
+            cell.style.top = `${y * this.cellSize}px`;
+            cell.style.width = `${this.cellSize - 1}px`;
+            cell.style.height = `${this.cellSize - 1}px`;
+            cell.style.borderRadius = '2px';
+            if (this.grid[y][x]) {
+              cell.style.background = 'var(--accent-color)';
+              cell.style.boxShadow = '0 0 5px var(--accent-color)';
+            } else {
+              cell.style.background = 'rgba(0, 221, 255, 0.05)';
+            }
+            this.canvas.appendChild(cell);
+          }
+        }
+      }
+
+      start() {
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.gameLoop = setInterval(() => {
+          this.nextGeneration();
+          this.draw();
+        }, this.speed);
+      }
+
+      pause() {
+        this.isRunning = false;
+        if (this.gameLoop) {
+          clearInterval(this.gameLoop);
+          this.gameLoop = null;
+        }
+      }
+    }
+
+    const lifeGame = new ConwayLife();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinding Visualizer - A* vs Dijkstra vs BFS vs DFS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ddff;
+            --secondary-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --dark-color: #050810;
+            --neural-pulse: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .game-container {
+            padding-top: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .game-area {
+            background: rgba(5, 8, 16, 0.8);
+            border: 2px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .canvas-container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        #pathfinding-canvas {
+            display: block;
+            cursor: crosshair;
+        }
+
+        .controls-area {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(0, 255, 136, 0.3));
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .algorithm-btn {
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.2), rgba(76, 205, 196, 0.2));
+        }
+
+        .algorithm-btn.active {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            border-color: var(--accent-color);
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .stat-item {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .algorithm-section {
+            background: rgba(5, 8, 16, 0.8);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .algorithm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .algorithm-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .algorithm-card {
+            background: rgba(0, 221, 255, 0.05);
+            border: 1px solid rgba(0, 221, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .algorithm-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .game-name {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .game-navbar {
+                padding: 1rem;
+            }
+            
+            .controls-area {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="game-navbar">
+        <div class="game-title">🗺️ Pathfinding Visualizer</div>
+        <div class="nav-buttons">
+            <a href="games.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Back to Games
+            </a>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <div class="game-header">
+            <span class="game-icon">🗺️</span>
+            <h1 class="game-name">Pathfinding Visualizer</h1>
+            <p class="game-description">
+                Compare different pathfinding algorithms in action! Watch how A*, Dijkstra, BFS, and DFS 
+                explore the search space to find paths from start to goal.
+            </p>
+        </div>
+
+        <div class="game-area">
+            <div class="canvas-container">
+                <canvas id="pathfinding-canvas" width="1000" height="600"></canvas>
+            </div>
+
+            <div class="controls-area">
+                <button class="control-btn algorithm-btn active" onclick="pathfinder.setAlgorithm('astar')" id="astar-btn">A* Star</button>
+                <button class="control-btn algorithm-btn" onclick="pathfinder.setAlgorithm('dijkstra')" id="dijkstra-btn">Dijkstra</button>
+                <button class="control-btn algorithm-btn" onclick="pathfinder.setAlgorithm('bfs')" id="bfs-btn">BFS</button>
+                <button class="control-btn algorithm-btn" onclick="pathfinder.setAlgorithm('dfs')" id="dfs-btn">DFS</button>
+                <button class="control-btn" onclick="pathfinder.start()" id="start-btn">Start</button>
+                <button class="control-btn" onclick="pathfinder.pause()" id="pause-btn" disabled>Pause</button>
+                <button class="control-btn" onclick="pathfinder.reset()">Reset</button>
+                <button class="control-btn" onclick="pathfinder.clearWalls()">Clear Walls</button>
+                <button class="control-btn" onclick="pathfinder.generateMaze()">Random Maze</button>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="nodes-visited">0</span>
+                    <span class="stat-label">Nodes Visited</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="path-length">0</span>
+                    <span class="stat-label">Path Length</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="execution-time">0ms</span>
+                    <span class="stat-label">Execution Time</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="current-algorithm">A*</span>
+                    <span class="stat-label">Algorithm</span>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00ff88;"></div>
+                    <span>Start Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff6b6b;"></div>
+                    <span>End Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #333;"></div>
+                    <span>Wall</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00ddff;"></div>
+                    <span>Visited</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4ecdc4;"></div>
+                    <span>Path</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffdd00;"></div>
+                    <span>Frontier</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-section">
+            <h2 class="algorithm-title">Pathfinding Algorithms Comparison</h2>
+            <p>Each algorithm has different strengths and use cases. Watch how they explore the search space differently to find paths.</p>
+            
+            <div class="algorithm-comparison">
+                <div class="algorithm-card">
+                    <h3 class="algorithm-name">A* (A-Star)</h3>
+                    <p><strong>Type:</strong> Informed Search</p>
+                    <p><strong>Guarantees:</strong> Optimal path (with admissible heuristic)</p>
+                    <p><strong>Complexity:</strong> O(b^d) where b is branching factor, d is depth</p>
+                    <p><strong>Use Case:</strong> When you need the shortest path and have a good heuristic</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3 class="algorithm-name">Dijkstra's Algorithm</h3>
+                    <p><strong>Type:</strong> Uninformed Search</p>
+                    <p><strong>Guarantees:</strong> Optimal path</p>
+                    <p><strong>Complexity:</strong> O((V + E) log V) with binary heap</p>
+                    <p><strong>Use Case:</strong> When you need shortest path without heuristic knowledge</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3 class="algorithm-name">Breadth-First Search (BFS)</h3>
+                    <p><strong>Type:</strong> Uninformed Search</p>
+                    <p><strong>Guarantees:</strong> Optimal path (unweighted graphs)</p>
+                    <p><strong>Complexity:</strong> O(V + E)</p>
+                    <p><strong>Use Case:</strong> Simple pathfinding in unweighted graphs</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3 class="algorithm-name">Depth-First Search (DFS)</h3>
+                    <p><strong>Type:</strong> Uninformed Search</p>
+                    <p><strong>Guarantees:</strong> No optimal path guarantee</p>
+                    <p><strong>Complexity:</strong> O(V + E)</p>
+                    <p><strong>Use Case:</strong> Graph traversal, finding any path quickly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    class PathfindingVisualizer {
+        constructor() {
+            this.canvas = document.getElementById('pathfinding-canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.cellSize = 20;
+            this.cols = Math.floor(this.canvas.width / this.cellSize);
+            this.rows = Math.floor(this.canvas.height / this.cellSize);
+            
+            this.grid = this.createGrid();
+            this.startNode = { x: 5, y: 5 };
+            this.endNode = { x: this.cols - 6, y: this.rows - 6 };
+            this.isDrawing = false;
+            this.drawMode = 'wall'; // 'wall', 'start', 'end'
+            this.currentAlgorithm = 'astar';
+            this.isRunning = false;
+            this.animationSpeed = 10;
+            
+            this.colors = {
+                empty: '#1a1a2e',
+                wall: '#333',
+                start: '#00ff88',
+                end: '#ff6b6b',
+                visited: '#00ddff',
+                path: '#4ecdc4',
+                frontier: '#ffdd00'
+            };
+
+            this.stats = {
+                nodesVisited: 0,
+                pathLength: 0,
+                executionTime: 0
+            };
+
+            this.setupEventListeners();
+            this.draw();
+        }
+
+        createGrid() {
+            const grid = [];
+            for (let y = 0; y < this.rows; y++) {
+                grid[y] = [];
+                for (let x = 0; x < this.cols; x++) {
+                    grid[y][x] = {
+                        x: x,
+                        y: y,
+                        type: 'empty', // 'empty', 'wall', 'start', 'end', 'visited', 'path', 'frontier'
+                        g: Infinity,
+                        h: 0,
+                        f: Infinity,
+                        parent: null,
+                        distance: Infinity
+                    };
+                }
+            }
+            return grid;
+        }
+
+        setupEventListeners() {
+            this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+            this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+            this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 's' || e.key === 'S') this.drawMode = 'start';
+                else if (e.key === 'e' || e.key === 'E') this.drawMode = 'end';
+                else if (e.key === 'w' || e.key === 'W') this.drawMode = 'wall';
+            });
+        }
+
+        getMousePos(e) {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / this.cellSize);
+            const y = Math.floor((e.clientY - rect.top) / this.cellSize);
+            return { x, y };
+        }
+
+        handleMouseDown(e) {
+            if (this.isRunning) return;
+            
+            this.isDrawing = true;
+            const pos = this.getMousePos(e);
+            
+            if (pos.x >= 0 && pos.x < this.cols && pos.y >= 0 && pos.y < this.rows) {
+                const node = this.grid[pos.y][pos.x];
+                
+                if (this.drawMode === 'start') {
+                    this.grid[this.startNode.y][this.startNode.x].type = 'empty';
+                    this.startNode = { x: pos.x, y: pos.y };
+                    node.type = 'start';
+                } else if (this.drawMode === 'end') {
+                    this.grid[this.endNode.y][this.endNode.x].type = 'empty';
+                    this.endNode = { x: pos.x, y: pos.y };
+                    node.type = 'end';
+                } else if (this.drawMode === 'wall') {
+                    if (node.type === 'empty') {
+                        node.type = 'wall';
+                    } else if (node.type === 'wall') {
+                        node.type = 'empty';
+                    }
+                }
+                this.draw();
+            }
+        }
+
+        handleMouseMove(e) {
+            if (!this.isDrawing || this.isRunning || this.drawMode !== 'wall') return;
+            
+            const pos = this.getMousePos(e);
+            if (pos.x >= 0 && pos.x < this.cols && pos.y >= 0 && pos.y < this.rows) {
+                const node = this.grid[pos.y][pos.x];
+                if (node.type === 'empty') {
+                    node.type = 'wall';
+                    this.draw();
+                }
+            }
+        }
+
+        handleMouseUp() {
+            this.isDrawing = false;
+        }
+
+        setAlgorithm(algorithm) {
+            if (this.isRunning) return;
+            
+            this.currentAlgorithm = algorithm;
+            document.querySelectorAll('.algorithm-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`${algorithm}-btn`).classList.add('active');
+            document.getElementById('current-algorithm').textContent = algorithm.toUpperCase();
+        }
+
+        async start() {
+            if (this.isRunning) return;
+            
+            this.isRunning = true;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('pause-btn').disabled = false;
+            
+            this.resetStats();
+            this.clearVisualization();
+            
+            const startTime = performance.now();
+            
+            let result;
+            switch (this.currentAlgorithm) {
+                case 'astar':
+                    result = await this.aStar();
+                    break;
+                case 'dijkstra':
+                    result = await this.dijkstra();
+                    break;
+                case 'bfs':
+                    result = await this.bfs();
+                    break;
+                case 'dfs':
+                    result = await this.dfs();
+                    break;
+            }
+            
+            const endTime = performance.now();
+            this.stats.executionTime = Math.round(endTime - startTime);
+            
+            if (result.path) {
+                await this.animatePath(result.path);
+                this.stats.pathLength = result.path.length;
+            }
+            
+            this.updateStats();
+            this.isRunning = false;
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        pause() {
+            this.isRunning = false;
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        reset() {
+            this.isRunning = false;
+            this.clearVisualization();
+            this.resetStats();
+            this.updateStats();
+            this.draw();
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        clearWalls() {
+            for (let y = 0; y < this.rows; y++) {
+                for (let x = 0; x < this.cols; x++) {
+                    if (this.grid[y][x].type === 'wall') {
+                        this.grid[y][x].type = 'empty';
+                    }
+                }
+            }
+            this.draw();
+        }
+
+        generateMaze() {
+            // Clear existing walls
+            this.clearWalls();
+            
+            // Add random walls
+            for (let y = 0; y < this.rows; y++) {
+                for (let x = 0; x < this.cols; x++) {
+                    if (Math.random() < 0.3 && 
+                        !(x === this.startNode.x && y === this.startNode.y) &&
+                        !(x === this.endNode.x && y === this.endNode.y)) {
+                        this.grid[y][x].type = 'wall';
+                    }
+                }
+            }
+            this.draw();
+        }
+
+        clearVisualization() {
+            for (let y = 0; y < this.rows; y++) {
+                for (let x = 0; x < this.cols; x++) {
+                    const node = this.grid[y][x];
+                    if (node.type === 'visited' || node.type === 'path' || node.type === 'frontier') {
+                        node.type = 'empty';
+                    }
+                    node.g = Infinity;
+                    node.h = 0;
+                    node.f = Infinity;
+                    node.parent = null;
+                    node.distance = Infinity;
+                }
+            }
+        }
+
+        resetStats() {
+            this.stats.nodesVisited = 0;
+            this.stats.pathLength = 0;
+            this.stats.executionTime = 0;
+        }
+
+        updateStats() {
+            document.getElementById('nodes-visited').textContent = this.stats.nodesVisited;
+            document.getElementById('path-length').textContent = this.stats.pathLength;
+            document.getElementById('execution-time').textContent = `${this.stats.executionTime}ms`;
+        }
+
+        getNeighbors(node) {
+            const neighbors = [];
+            const directions = [
+                { x: 0, y: -1 }, // up
+                { x: 1, y: 0 },  // right
+                { x: 0, y: 1 },  // down
+                { x: -1, y: 0 }  // left
+            ];
+
+            for (const dir of directions) {
+                const x = node.x + dir.x;
+                const y = node.y + dir.y;
+                
+                if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
+                    const neighbor = this.grid[y][x];
+                    if (neighbor.type !== 'wall') {
+                        neighbors.push(neighbor);
+                    }
+                }
+            }
+            
+            return neighbors;
+        }
+
+        heuristic(a, b) {
+            // Manhattan distance
+            return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        }
+
+        async aStar() {
+            const startNode = this.grid[this.startNode.y][this.startNode.x];
+            const endNode = this.grid[this.endNode.y][this.endNode.x];
+            
+            const openSet = [startNode];
+            const closedSet = [];
+            
+            startNode.g = 0;
+            startNode.h = this.heuristic(startNode, endNode);
+            startNode.f = startNode.g + startNode.h;
+
+            while (openSet.length > 0 && this.isRunning) {
+                // Find node with lowest f score
+                let current = openSet[0];
+                for (let i = 1; i < openSet.length; i++) {
+                    if (openSet[i].f < current.f) {
+                        current = openSet[i];
+                    }
+                }
+
+                // Remove current from open set
+                const currentIndex = openSet.indexOf(current);
+                openSet.splice(currentIndex, 1);
+                closedSet.push(current);
+
+                // Mark as visited
+                if (current.type !== 'start' && current.type !== 'end') {
+                    current.type = 'visited';
+                    this.stats.nodesVisited++;
+                }
+
+                // Check if we reached the goal
+                if (current === endNode) {
+                    return { path: this.reconstructPath(current) };
+                }
+
+                // Check neighbors
+                const neighbors = this.getNeighbors(current);
+                for (const neighbor of neighbors) {
+                    if (closedSet.includes(neighbor)) continue;
+
+                    const tentativeG = current.g + 1;
+
+                    if (!openSet.includes(neighbor)) {
+                        openSet.push(neighbor);
+                        if (neighbor.type !== 'start' && neighbor.type !== 'end') {
+                            neighbor.type = 'frontier';
+                        }
+                    } else if (tentativeG >= neighbor.g) {
+                        continue;
+                    }
+
+                    neighbor.parent = current;
+                    neighbor.g = tentativeG;
+                    neighbor.h = this.heuristic(neighbor, endNode);
+                    neighbor.f = neighbor.g + neighbor.h;
+                }
+
+                this.draw();
+                await this.sleep(this.animationSpeed);
+            }
+
+            return { path: null };
+        }
+
+        async dijkstra() {
+            const startNode = this.grid[this.startNode.y][this.startNode.x];
+            const endNode = this.grid[this.endNode.y][this.endNode.x];
+            
+            const unvisited = [];
+            
+            // Initialize distances
+            for (let y = 0; y < this.rows; y++) {
+                for (let x = 0; x < this.cols; x++) {
+                    const node = this.grid[y][x];
+                    if (node.type !== 'wall') {
+                        node.distance = node === startNode ? 0 : Infinity;
+                        unvisited.push(node);
+                    }
+                }
+            }
+
+            while (unvisited.length > 0 && this.isRunning) {
+                // Find node with minimum distance
+                let current = unvisited.reduce((min, node) => 
+                    node.distance < min.distance ? node : min
+                );
+
+                // Remove from unvisited
+                const currentIndex = unvisited.indexOf(current);
+                unvisited.splice(currentIndex, 1);
+
+                // Mark as visited
+                if (current.type !== 'start' && current.type !== 'end') {
+                    current.type = 'visited';
+                    this.stats.nodesVisited++;
+                }
+
+                // Check if we reached the goal
+                if (current === endNode) {
+                    return { path: this.reconstructPath(current) };
+                }
+
+                // Update neighbors
+                const neighbors = this.getNeighbors(current);
+                for (const neighbor of neighbors) {
+                    if (unvisited.includes(neighbor)) {
+                        const altDistance = current.distance + 1;
+                        if (altDistance < neighbor.distance) {
+                            neighbor.distance = altDistance;
+                            neighbor.parent = current;
+                            if (neighbor.type !== 'start' && neighbor.type !== 'end') {
+                                neighbor.type = 'frontier';
+                            }
+                        }
+                    }
+                }
+
+                this.draw();
+                await this.sleep(this.animationSpeed);
+            }
+
+            return { path: null };
+        }
+
+        async bfs() {
+            const startNode = this.grid[this.startNode.y][this.startNode.x];
+            const endNode = this.grid[this.endNode.y][this.endNode.x];
+            
+            const queue = [startNode];
+            const visited = new Set([startNode]);
+
+            while (queue.length > 0 && this.isRunning) {
+                const current = queue.shift();
+
+                // Mark as visited
+                if (current.type !== 'start' && current.type !== 'end') {
+                    current.type = 'visited';
+                    this.stats.nodesVisited++;
+                }
+
+                // Check if we reached the goal
+                if (current === endNode) {
+                    return { path: this.reconstructPath(current) };
+                }
+
+                // Add neighbors to queue
+                const neighbors = this.getNeighbors(current);
+                for (const neighbor of neighbors) {
+                    if (!visited.has(neighbor)) {
+                        visited.add(neighbor);
+                        neighbor.parent = current;
+                        queue.push(neighbor);
+                        if (neighbor.type !== 'start' && neighbor.type !== 'end') {
+                            neighbor.type = 'frontier';
+                        }
+                    }
+                }
+
+                this.draw();
+                await this.sleep(this.animationSpeed);
+            }
+
+            return { path: null };
+        }
+
+        async dfs() {
+            const startNode = this.grid[this.startNode.y][this.startNode.x];
+            const endNode = this.grid[this.endNode.y][this.endNode.x];
+            
+            const stack = [startNode];
+            const visited = new Set();
+
+            while (stack.length > 0 && this.isRunning) {
+                const current = stack.pop();
+
+                if (visited.has(current)) continue;
+                visited.add(current);
+
+                // Mark as visited
+                if (current.type !== 'start' && current.type !== 'end') {
+                    current.type = 'visited';
+                    this.stats.nodesVisited++;
+                }
+
+                // Check if we reached the goal
+                if (current === endNode) {
+                    return { path: this.reconstructPath(current) };
+                }
+
+                // Add neighbors to stack
+                const neighbors = this.getNeighbors(current);
+                for (const neighbor of neighbors) {
+                    if (!visited.has(neighbor)) {
+                        neighbor.parent = current;
+                        stack.push(neighbor);
+                        if (neighbor.type !== 'start' && neighbor.type !== 'end') {
+                            neighbor.type = 'frontier';
+                        }
+                    }
+                }
+
+                this.draw();
+                await this.sleep(this.animationSpeed);
+            }
+
+            return { path: null };
+        }
+
+        reconstructPath(endNode) {
+            const path = [];
+            let current = endNode;
+            
+            while (current !== null) {
+                path.unshift(current);
+                current = current.parent;
+            }
+            
+            return path;
+        }
+
+        async animatePath(path) {
+            for (let i = 1; i < path.length - 1; i++) {
+                if (!this.isRunning) break;
+                path[i].type = 'path';
+                this.draw();
+                await this.sleep(50);
+            }
+        }
+
+        draw() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            for (let y = 0; y < this.rows; y++) {
+                for (let x = 0; x < this.cols; x++) {
+                    const node = this.grid[y][x];
+                    const color = this.colors[node.type];
+                    
+                    this.ctx.fillStyle = color;
+                    this.ctx.fillRect(
+                        x * this.cellSize,
+                        y * this.cellSize,
+                        this.cellSize - 1,
+                        this.cellSize - 1
+                    );
+                }
+            }
+
+            // Mark start and end nodes
+            this.grid[this.startNode.y][this.startNode.x].type = 'start';
+            this.grid[this.endNode.y][this.endNode.x].type = 'end';
+        }
+
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    }
+
+    const pathfinder = new PathfindingVisualizer();
+    </script>
+</body>
+</html> 

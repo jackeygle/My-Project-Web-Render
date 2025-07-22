@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact :: Xinle Zhang - AI & Robotics Portfolio</title>
+  <meta name="description" content="Contact Xinle Zhang - AI & Robotics Engineer, Master's student at KTH Royal Institute of Technology">
+  <meta name="keywords" content="Contact, Xinle Zhang, AI, Robotics, KTH, Stockholm, Email">
+  <meta name="author" content="Xinle Zhang">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Electrolize:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --secondary-color: #ff0080;
+      --accent-color: #00ff88;
+      --dark-color: #050810;
+      --dark-blue: #0a1628;
+      --text-glow: 0 0 10px rgba(0, 221, 255, 0.5);
+      --grid-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Electrolize', sans-serif;
+      background: linear-gradient(135deg, var(--dark-color) 0%, var(--dark-blue) 100%);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+      padding-top: 100px;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 221, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 221, 255, 0.1) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(var(--grid-size), var(--grid-size)); }
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: all 0.3s ease;
+      text-shadow: var(--text-glow);
+    }
+
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .nav-link.active {
+      color: var(--accent-color) !important;
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding: 2rem 0;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* Contact Grid */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .contact-section {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-icon {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+    }
+
+    /* Contact Items */
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(0, 221, 255, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .contact-item:hover {
+      background: rgba(0, 221, 255, 0.1);
+      border-color: var(--primary-color);
+      transform: translateX(5px);
+      box-shadow: 0 5px 20px rgba(0, 221, 255, 0.2);
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      color: var(--accent-color);
+      width: 60px;
+      text-align: center;
+      min-width: 60px;
+    }
+
+    .contact-details h4 {
+      color: var(--primary-color);
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .contact-details p {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .contact-details a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-details a:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    /* Social Links */
+    .social-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 120px;
+      background: rgba(0, 221, 255, 0.1);
+      border: 2px solid var(--primary-color);
+      border-radius: 20px;
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 221, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .social-link:hover::before {
+      left: 100%;
+    }
+
+    .social-link:hover {
+      background: var(--primary-color);
+      color: var(--dark-color);
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 221, 255, 0.4);
+      text-decoration: none;
+    }
+
+    .social-link i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      z-index: 1;
+    }
+
+    .social-link span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .form-control {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 221, 255, 0.4);
+      border-radius: 10px;
+      color: #fff;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      background: rgba(0, 221, 255, 0.05);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 221, 255, 0.3);
+      color: #fff;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Electrolize', sans-serif;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border: none;
+      color: var(--dark-color);
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+      font-size: 1.1rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.4);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Availability Status */
+    .availability-status {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 221, 255, 0.1));
+      border: 2px solid var(--accent-color);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .status-text {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent-color);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-description {
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(5, 8, 16, 0.9);
+      border-top: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 2rem 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .page-title {
+        font-size: 2.5rem;
+      }
+      
+      .social-links {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      
+      .social-link {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-animation">
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">[ AI // Xinle Zhang ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html"><i class="fas fa-user me-2"></i>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html"><i class="fas fa-code me-2"></i>Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="skills.html"><i class="fas fa-cog me-2"></i>Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="resume.html"><i class="fas fa-file-pdf me-2"></i>Resume</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="games.html"><i class="fas fa-gamepad me-2"></i>Games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Philosophy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header" data-aos="fade-up">
+      <h1 class="page-title">Contact Protocol</h1>
+      <p class="page-subtitle">// Communication Interface</p>
+    </div>
+
+    <!-- Availability Status -->
+    <div class="availability-status" data-aos="fade-up">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <div class="status-text">Available for Collaboration</div>
+      </div>
+      <div class="status-description">
+        I'm always excited to discuss AI, robotics, and innovative technology projects. 
+        Whether you're interested in collaboration, research opportunities, academic partnerships, 
+        or just want to chat about the latest developments in artificial intelligence and autonomous systems.
+      </div>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="contact-grid">
+      
+      <!-- Contact Information -->
+      <div class="contact-section" data-aos="fade-right">
+        <h2 class="section-title">
+          <i class="fas fa-address-card section-icon"></i>
+          Contact Information
+        </h2>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Email Address</h4>
+            <p><a href="mailto:jackeygle@gmail.com">jackeygle@gmail.com</a></p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Phone Number</h4>
+            <p><a href="tel:+46793395619">(+46) 793395619</a></p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Location</h4>
+            <p>Stockholm, Sweden<br>Körsbärsvägen 2, 114 23</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Time Zone</h4>
+            <p>Central European Time (CET)<br>UTC+1 / UTC+2 (DST)</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Contact Form -->
+      <div class="contact-section" data-aos="fade-left">
+        <h2 class="section-title">
+          <i class="fas fa-paper-plane section-icon"></i>
+          Quick Message
+        </h2>
+        
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@domain.com" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" placeholder="Brief subject line" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" name="message" placeholder="Your message here..." required></textarea>
+          </div>
+          
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-rocket me-2"></i>Send Message
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+
+    <!-- Social Links Section -->
+    <div class="social-section" data-aos="fade-up" data-aos-delay="400">
+      <h2 class="section-title" style="justify-content: center;">
+        <i class="fas fa-share-alt section-icon"></i>
+        Connect With Me
+      </h2>
+      
+      <div class="social-links">
+        
+        <a href="https://github.com/jackeygle" target="_blank" class="social-link">
+          <i class="fab fa-github"></i>
+          <span>GitHub</span>
+        </a>
+        
+        <a href="mailto:jackeygle@gmail.com" class="social-link">
+          <i class="fas fa-envelope"></i>
+          <span>Email</span>
+        </a>
+        
+        <a href="https://linkedin.com/in/xinle-zhang" target="_blank" class="social-link">
+          <i class="fab fa-linkedin"></i>
+          <span>LinkedIn</span>
+        </a>
+        
+        <a href="tel:+46793395619" class="social-link">
+          <i class="fas fa-phone"></i>
+          <span>Phone</span>
+        </a>
+        
+        <a href="https://jackeysproject.web.app" target="_blank" class="social-link">
+          <i class="fas fa-globe"></i>
+          <span>Portfolio</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Response Time Notice -->
+    <div class="contact-section" data-aos="fade-up" data-aos-delay="500" style="margin-top: 3rem;">
+      <h2 class="section-title">
+        <i class="fas fa-info-circle section-icon"></i>
+        Response Information
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-reply"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Email Response</h4>
+            <p>Typically within 24-48 hours<br>Priority for research/collaboration</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Best Contact For</h4>
+            <p>Research opportunities<br>Technical collaborations<br>Academic partnerships</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-language"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Languages</h4>
+            <p>English (Professional)<br>Chinese/Mandarin (Native)</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Xinle Zhang // AI & Robotics Portfolio // Communication Interface Operational</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Typing effect for page subtitle
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    // Initialize typing effect
+    window.addEventListener('load', function() {
+      const subtitle = document.querySelector('.page-subtitle');
+      if (subtitle) {
+        const originalText = subtitle.textContent;
+        typeWriter(subtitle, originalText, 150);
+      }
+    });
+
+    // Enhanced hover effects
+    document.querySelectorAll('.contact-item').forEach(item => {
+      item.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateX(10px)';
+      });
+      
+      item.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateX(5px)';
+      });
+    });
+
+    // Contact form handling
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('.btn-submit');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+      submitBtn.disabled = true;
+      
+      // Simulate form submission (replace with actual form handling)
+      setTimeout(() => {
+        submitBtn.innerHTML = '<i class="fas fa-check me-2"></i>Message Sent!';
+        submitBtn.style.background = 'linear-gradient(45deg, var(--accent-color), var(--primary-color))';
+        
+        // Reset form
+        this.reset();
+        
+        // Reset button after delay
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          submitBtn.style.background = '';
+        }, 3000);
+      }, 2000);
+    });
+
+    // Form field focus effects
+    document.querySelectorAll('.form-control').forEach(field => {
+      field.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      field.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Social link click tracking
+    document.querySelectorAll('.social-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.classList.add('fa-spin');
+          setTimeout(() => {
+            icon.classList.remove('fa-spin');
+          }, 1000);
+        }
+      });
+    });
+
+    // Add particle effect on mouse move
+    document.addEventListener('mousemove', function(e) {
+      if (Math.random() > 0.95) {
+        createParticle(e.clientX, e.clientY);
+      }
+    });
+
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.width = '2px';
+      particle.style.height = '2px';
+      particle.style.background = 'var(--accent-color)';
+      particle.style.borderRadius = '50%';
+      particle.style.pointerEvents = 'none';
+      particle.style.zIndex = '9999';
+      particle.style.animation = 'particleFade 2s ease-out forwards';
+      
+      document.body.appendChild(particle);
+      
+      setTimeout(() => {
+        document.body.removeChild(particle);
+      }, 2000);
+    }
+
+    // Add particle animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes particleFade {
+        0% { opacity: 1; transform: scale(1) translate(0, 0); }
+        100% { opacity: 0; transform: scale(0) translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html> 

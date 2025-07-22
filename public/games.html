@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming Games :: Algorithm Playground</title>
+  <meta name="description" content="Interactive programming games showcasing algorithms, AI, and game development skills.">
+  <meta name="keywords" content="programming games, algorithms, AI, JavaScript, game development, coding">
+  <meta name="author" content="Jackeygle">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --secondary-color: #ff0080;
+      --accent-color: #00ff88;
+      --dark-color: #050810;
+      --dark-blue: #0a1628;
+      --text-glow: 0 0 10px rgba(0, 221, 255, 0.5);
+      --grid-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: linear-gradient(135deg, var(--dark-color) 0%, var(--dark-blue) 100%);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 221, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 221, 255, 0.1) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(var(--grid-size), var(--grid-size)); }
+    }
+
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: all 0.3s ease;
+      text-shadow: var(--text-glow);
+    }
+
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 100px 0 60px;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .hero-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .games-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2.5rem; /* Increased gap */
+      position: relative;
+    }
+
+    .game-card {
+        position: relative;
+        background: linear-gradient(145deg, rgba(10, 22, 40, 0.8), rgba(5, 8, 16, 0.8));
+        border: 1px solid rgba(0, 221, 255, 0.3);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transform-style: preserve-3d;
+        perspective: 1500px;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        display: flex; /* Flexbox for layout */
+        flex-direction: column; /* Stack content vertically */
+    }
+
+    .game-content {
+        padding: 2rem;
+        transition: transform 0.4s ease;
+        transform-style: preserve-3d;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Make content grow to fill card */
+    }
+
+    .game-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 40px rgba(0, 221, 255, 0.3);
+    }
+    
+    .game-header, .game-description, .game-info, .game-controls {
+        transform: translateZ(20px);
+    }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 221, 255, 0.2);
+      transform: translateZ(60px);
+    }
+
+    .game-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 221, 255, 0.3);
+    }
+
+    .game-status {
+      font-size: 0.75rem;
+      padding: 0.4rem 1rem;
+      border-radius: 25px;
+      background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(0, 221, 255, 0.2));
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+
+    .game-description {
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      min-height: 100px; /* Ensure cards have similar height */
+      transform: translateZ(40px);
+      flex-grow: 1; /* Allow description to take up space */
+    }
+    
+    .game-info {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 2rem;
+      transform: translateZ(20px);
+    }
+
+    .info-item {
+      background: rgba(0, 221, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 221, 255, 0.2);
+    }
+
+    .game-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: auto; /* Push to the bottom */
+        transform: translateZ(30px);
+    }
+
+    .launch-btn {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      border: none;
+      color: white;
+      padding: 0.8rem 2.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 20px rgba(0, 221, 255, 0.3);
+      position: relative;
+      z-index: 10;
+    }
+
+    .launch-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 30px rgba(0, 221, 255, 0.5);
+    }
+    
+    @media (max-width: 768px) {
+      .games-container {
+        grid-template-columns: 1fr;
+        padding: 0 1rem 4rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-animation">
+    <div class="bg-grid"></div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">[ Algorithm Playground // Jackeygle ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html"><i class="fas fa-folder-open me-2"></i>Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Philosophy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-section" data-aos="fade-down">
+    <h1 class="hero-title">Programming Games</h1>
+    <p class="hero-subtitle">Algorithm Visualization & Interactive Demos</p>
+  </div>
+
+  <div class="games-container">
+    
+    <!-- Snake AI Game -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="game-content">
+        <div class="game-header">
+          <h3 class="game-title">🐍 Snake AI</h3>
+          <span class="game-status">A* Pathfinding</span>
+        </div>
+        <p class="game-description">AI-powered snake that uses A* pathfinding algorithm to efficiently collect food while avoiding collisions.</p>
+        <div class="game-info">
+          <span class="info-item">Algorithm: A*</span>
+          <span class="info-item">Type: Heuristic Search</span>
+        </div>
+        <div class="game-controls">
+            <button class="launch-btn" onclick="window.location.href='snake-game.html'">Launch Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conway's Life Game -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="game-content">
+            <div class="game-header">
+                <h3 class="game-title">🔄 Conway's Life</h3>
+                <span class="game-status">Cellular Automata</span>
+            </div>
+            <p class="game-description">A cellular automaton where simple rules create complex, emergent patterns. Each cell lives or dies based on its neighbors.</p>
+            <div class="game-info">
+                <span class="info-item">Type: Zero-player game</span>
+                <span class="info-item">Concept: Emergence</span>
+            </div>
+            <div class="game-controls">
+                <button class="launch-btn" onclick="window.location.href='conway-game.html'">Launch Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sudoku Solver -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="game-content">
+            <div class="game-header">
+                <h3 class="game-title">🧩 Sudoku Solver</h3>
+                <span class="game-status">Backtracking</span>
+            </div>
+            <p class="game-description">Automated Sudoku solver using backtracking. Watch as it systematically tries numbers and finds the solution.</p>
+            <div class="game-info">
+                <span class="info-item">Algorithm: Backtracking</span>
+                <span class="info-item">Type: CSP</span>
+            </div>
+            <div class="game-controls">
+                <button class="launch-btn" onclick="window.location.href='sudoku-game.html'">Launch Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tetris -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="game-content">
+            <div class="game-header">
+                <h3 class="game-title">🟦 Tetris</h3>
+                <span class="game-status">Game Logic</span>
+            </div>
+            <p class="game-description">Classic Tetris implementation with smooth animations, line clearing, and increasing difficulty.</p>
+            <div class="game-info">
+                <span class="info-item">Genre: Puzzle</span>
+                <span class="info-item">Core: State Management</span>
+            </div>
+            <div class="game-controls">
+                <button class="launch-btn" onclick="window.location.href='tetris-game.html'">Launch Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2048 AI Game -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="game-content">
+            <div class="game-header">
+                <h3 class="game-title">🎯 2048 AI</h3>
+                <span class="game-status">Minimax</span>
+            </div>
+            <p class="game-description">AI that plays 2048 using minimax algorithm. Watch as it evaluates future board states to make optimal moves.</p>
+            <div class="game-info">
+                <span class="info-item">Algorithm: Minimax</span>
+                <span class="info-item">Type: Adversarial Search</span>
+            </div>
+            <div class="game-controls">
+                <button class="launch-btn" onclick="window.location.href='2048-ai-game.html'">Launch Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pathfinding Visualizer -->
+    <div class="game-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="game-content">
+            <div class="game-header">
+                <h3 class="game-title">🗺️ Pathfinding</h3>
+                <span class="game-status">A* vs Dijkstra</span>
+            </div>
+            <p class="game-description">Compare different pathfinding algorithms: A*, Dijkstra, BFS, and DFS. Visualize how each algorithm explores the search space.</p>
+            <div class="game-info">
+                <span class="info-item">Algorithms: A*, Dijkstra</span>
+                <span class="info-item">Type: Graph Traversal</span>
+            </div>
+            <div class="game-controls">
+                <button class="launch-btn" onclick="window.location.href='pathfinding-visualizer-game.html'">Launch Game</button>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    document.querySelectorAll('.game-card').forEach(card => {
+      const content = card.querySelector('.game-content');
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / centerY * -12;
+        const rotateY = (x - centerX) / centerX * 12;
+        
+        content.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        content.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  </script>
+</body>
+</html> 

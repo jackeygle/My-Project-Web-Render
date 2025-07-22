@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 AI - Minimax Algorithm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ddff;
+            --secondary-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --dark-color: #050810;
+            --neural-pulse: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .game-container {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .game-area {
+            background: rgba(5, 8, 16, 0.8);
+            border: 2px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-board {
+            background: #bbada0;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .grid-cell {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(238, 228, 218, 0.35);
+            border-radius: 6px;
+        }
+
+        .tile-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+        }
+
+        .tile {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease-in-out;
+            user-select: none;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(0, 255, 136, 0.3));
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .stat-item {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .algorithm-section {
+            background: rgba(5, 8, 16, 0.8);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .algorithm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .ai-status {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .game-name {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .game-navbar {
+                padding: 1rem;
+            }
+            
+            .grid-cell,
+            .tile {
+                width: 70px;
+                height: 70px;
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="game-navbar">
+        <div class="game-title">🎯 2048 AI</div>
+        <div class="nav-buttons">
+            <a href="games.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Back to Games
+            </a>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <div class="game-header">
+            <span class="game-icon">🎯</span>
+            <h1 class="game-name">2048 AI</h1>
+            <p class="game-description">
+                Watch the AI play 2048 using the Minimax algorithm with alpha-beta pruning. 
+                The AI evaluates future board states to make optimal moves.
+            </p>
+        </div>
+
+        <div class="game-area">
+            <div class="ai-status" id="ai-status">Ready to start</div>
+            
+            <div class="game-board">
+                <div class="grid-container" id="grid-container"></div>
+                <div class="tile-container" id="tile-container"></div>
+            </div>
+
+            <div class="game-controls">
+                <button class="control-btn" onclick="game2048.startAI()" id="start-btn">Start AI</button>
+                <button class="control-btn" onclick="game2048.pauseAI()" id="pause-btn" disabled>Pause AI</button>
+                <button class="control-btn" onclick="game2048.stepAI()" id="step-btn">Step</button>
+                <button class="control-btn" onclick="game2048.reset()">Reset</button>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="game-score">0</span>
+                    <span class="stat-label">Score</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="max-tile">2</span>
+                    <span class="stat-label">Max Tile</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="move-count">0</span>
+                    <span class="stat-label">Moves</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="ai-depth">4</span>
+                    <span class="stat-label">AI Depth</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-section">
+            <h2 class="algorithm-title">Minimax Algorithm with Alpha-Beta Pruning</h2>
+            <div class="algorithm-content">
+                <p>The Minimax algorithm is a decision-making algorithm used in game theory and artificial intelligence. In 2048, the AI uses this algorithm to look ahead several moves and choose the best possible action.</p>
+                
+                <br>
+                
+                <p><strong>How it works:</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Maximizing Player:</strong> The AI tries to maximize the score by choosing the best move</li>
+                    <li><strong>Minimizing Player:</strong> Random tile placement tries to minimize the AI's advantage</li>
+                    <li><strong>Alpha-Beta Pruning:</strong> Eliminates branches that won't affect the final decision</li>
+                    <li><strong>Evaluation Function:</strong> Considers board smoothness, monotonicity, and empty cells</li>
+                </ul>
+
+                <br>
+
+                <p><strong>Evaluation Heuristics:</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Smoothness:</strong> Prefers adjacent tiles with similar values</li>
+                    <li><strong>Monotonicity:</strong> Rewards increasing/decreasing sequences</li>
+                    <li><strong>Empty Cells:</strong> Values boards with more free spaces</li>
+                    <li><strong>Max Tile Position:</strong> Prefers max tile in corners</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    class Game2048 {
+        constructor() {
+            this.board = Array(4).fill().map(() => Array(4).fill(0));
+            this.score = 0;
+            this.moveCount = 0;
+            this.isAIRunning = false;
+            this.aiInterval = null;
+            this.maxDepth = 4;
+            
+            this.tileColors = {
+                2: { bg: '#eee4da', color: '#776e65' },
+                4: { bg: '#ede0c8', color: '#776e65' },
+                8: { bg: '#f2b179', color: '#f9f6f2' },
+                16: { bg: '#f59563', color: '#f9f6f2' },
+                32: { bg: '#f67c5f', color: '#f9f6f2' },
+                64: { bg: '#f65e3b', color: '#f9f6f2' },
+                128: { bg: '#edcf72', color: '#f9f6f2' },
+                256: { bg: '#edcc61', color: '#f9f6f2' },
+                512: { bg: '#edc850', color: '#f9f6f2' },
+                1024: { bg: '#edc53f', color: '#f9f6f2' },
+                2048: { bg: '#edc22e', color: '#f9f6f2' },
+                4096: { bg: '#3c3a32', color: '#f9f6f2' }
+            };
+
+            this.init();
+        }
+
+        init() {
+            this.createGrid();
+            this.addRandomTile();
+            this.addRandomTile();
+            this.updateDisplay();
+        }
+
+        createGrid() {
+            const gridContainer = document.getElementById('grid-container');
+            gridContainer.innerHTML = '';
+            
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                gridContainer.appendChild(cell);
+            }
+        }
+
+        addRandomTile() {
+            const emptyCells = [];
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (this.board[r][c] === 0) {
+                        emptyCells.push({r, c});
+                    }
+                }
+            }
+            
+            if (emptyCells.length > 0) {
+                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                this.board[randomCell.r][randomCell.c] = Math.random() < 0.9 ? 2 : 4;
+            }
+        }
+
+        move(direction) {
+            const newBoard = this.board.map(row => [...row]);
+            let moved = false;
+            let scoreIncrease = 0;
+
+            if (direction === 'left') {
+                for (let r = 0; r < 4; r++) {
+                    const row = this.board[r].filter(val => val !== 0);
+                    for (let i = 0; i < row.length - 1; i++) {
+                        if (row[i] === row[i + 1]) {
+                            row[i] *= 2;
+                            scoreIncrease += row[i];
+                            row.splice(i + 1, 1);
+                        }
+                    }
+                    while (row.length < 4) row.push(0);
+                    newBoard[r] = row;
+                }
+            } else if (direction === 'right') {
+                for (let r = 0; r < 4; r++) {
+                    const row = this.board[r].filter(val => val !== 0);
+                    for (let i = row.length - 1; i > 0; i--) {
+                        if (row[i] === row[i - 1]) {
+                            row[i] *= 2;
+                            scoreIncrease += row[i];
+                            row.splice(i - 1, 1);
+                            i--;
+                        }
+                    }
+                    while (row.length < 4) row.unshift(0);
+                    newBoard[r] = row;
+                }
+            } else if (direction === 'up') {
+                for (let c = 0; c < 4; c++) {
+                    const column = [];
+                    for (let r = 0; r < 4; r++) {
+                        if (this.board[r][c] !== 0) column.push(this.board[r][c]);
+                    }
+                    for (let i = 0; i < column.length - 1; i++) {
+                        if (column[i] === column[i + 1]) {
+                            column[i] *= 2;
+                            scoreIncrease += column[i];
+                            column.splice(i + 1, 1);
+                        }
+                    }
+                    while (column.length < 4) column.push(0);
+                    for (let r = 0; r < 4; r++) {
+                        newBoard[r][c] = column[r];
+                    }
+                }
+            } else if (direction === 'down') {
+                for (let c = 0; c < 4; c++) {
+                    const column = [];
+                    for (let r = 0; r < 4; r++) {
+                        if (this.board[r][c] !== 0) column.push(this.board[r][c]);
+                    }
+                    for (let i = column.length - 1; i > 0; i--) {
+                        if (column[i] === column[i - 1]) {
+                            column[i] *= 2;
+                            scoreIncrease += column[i];
+                            column.splice(i - 1, 1);
+                            i--;
+                        }
+                    }
+                    while (column.length < 4) column.unshift(0);
+                    for (let r = 0; r < 4; r++) {
+                        newBoard[r][c] = column[r];
+                    }
+                }
+            }
+
+            // Check if board changed
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (this.board[r][c] !== newBoard[r][c]) {
+                        moved = true;
+                        break;
+                    }
+                }
+            }
+
+            if (moved) {
+                this.board = newBoard;
+                this.score += scoreIncrease;
+                this.moveCount++;
+                this.addRandomTile();
+                return true;
+            }
+            return false;
+        }
+
+        canMove() {
+            // Check for empty cells
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (this.board[r][c] === 0) return true;
+                }
+            }
+
+            // Check for possible merges
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    const current = this.board[r][c];
+                    if ((r < 3 && this.board[r + 1][c] === current) ||
+                        (c < 3 && this.board[r][c + 1] === current)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        getMaxTile() {
+            let max = 0;
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    max = Math.max(max, this.board[r][c]);
+                }
+            }
+            return max;
+        }
+
+        // AI Implementation
+        minimax(board, depth, isMaximizing, alpha, beta) {
+            if (depth === 0 || !this.canMoveBoard(board)) {
+                return this.evaluateBoard(board);
+            }
+
+            if (isMaximizing) {
+                let maxEval = -Infinity;
+                const moves = ['up', 'down', 'left', 'right'];
+                
+                for (const move of moves) {
+                    const newBoard = this.simulateMove(board, move);
+                    if (this.boardsEqual(board, newBoard)) continue;
+                    
+                    const evaluation = this.minimax(newBoard, depth - 1, false, alpha, beta);
+                    maxEval = Math.max(maxEval, evaluation);
+                    alpha = Math.max(alpha, evaluation);
+                    
+                    if (beta <= alpha) break; // Alpha-beta pruning
+                }
+                return maxEval;
+            } else {
+                let minEval = Infinity;
+                const emptyCells = this.getEmptyCells(board);
+                
+                for (const cell of emptyCells) {
+                    for (const value of [2, 4]) {
+                        const newBoard = board.map(row => [...row]);
+                        newBoard[cell.r][cell.c] = value;
+                        
+                        const evaluation = this.minimax(newBoard, depth - 1, true, alpha, beta);
+                        minEval = Math.min(minEval, evaluation);
+                        beta = Math.min(beta, evaluation);
+                        
+                        if (beta <= alpha) break;
+                    }
+                }
+                return minEval;
+            }
+        }
+
+        getBestMove() {
+            let bestMove = null;
+            let bestScore = -Infinity;
+            const moves = ['up', 'down', 'left', 'right'];
+
+            for (const move of moves) {
+                const newBoard = this.simulateMove(this.board, move);
+                if (this.boardsEqual(this.board, newBoard)) continue;
+                
+                const score = this.minimax(newBoard, this.maxDepth - 1, false, -Infinity, Infinity);
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+            }
+            
+            return bestMove;
+        }
+
+        simulateMove(board, direction) {
+            const newBoard = board.map(row => [...row]);
+            
+            if (direction === 'left') {
+                for (let r = 0; r < 4; r++) {
+                    const row = newBoard[r].filter(val => val !== 0);
+                    for (let i = 0; i < row.length - 1; i++) {
+                        if (row[i] === row[i + 1]) {
+                            row[i] *= 2;
+                            row.splice(i + 1, 1);
+                        }
+                    }
+                    while (row.length < 4) row.push(0);
+                    newBoard[r] = row;
+                }
+            } else if (direction === 'right') {
+                for (let r = 0; r < 4; r++) {
+                    const row = newBoard[r].filter(val => val !== 0);
+                    for (let i = row.length - 1; i > 0; i--) {
+                        if (row[i] === row[i - 1]) {
+                            row[i] *= 2;
+                            row.splice(i - 1, 1);
+                            i--;
+                        }
+                    }
+                    while (row.length < 4) row.unshift(0);
+                    newBoard[r] = row;
+                }
+            } else if (direction === 'up') {
+                for (let c = 0; c < 4; c++) {
+                    const column = [];
+                    for (let r = 0; r < 4; r++) {
+                        if (newBoard[r][c] !== 0) column.push(newBoard[r][c]);
+                    }
+                    for (let i = 0; i < column.length - 1; i++) {
+                        if (column[i] === column[i + 1]) {
+                            column[i] *= 2;
+                            column.splice(i + 1, 1);
+                        }
+                    }
+                    while (column.length < 4) column.push(0);
+                    for (let r = 0; r < 4; r++) {
+                        newBoard[r][c] = column[r];
+                    }
+                }
+            } else if (direction === 'down') {
+                for (let c = 0; c < 4; c++) {
+                    const column = [];
+                    for (let r = 0; r < 4; r++) {
+                        if (newBoard[r][c] !== 0) column.push(newBoard[r][c]);
+                    }
+                    for (let i = column.length - 1; i > 0; i--) {
+                        if (column[i] === column[i - 1]) {
+                            column[i] *= 2;
+                            column.splice(i - 1, 1);
+                            i--;
+                        }
+                    }
+                    while (column.length < 4) column.unshift(0);
+                    for (let r = 0; r < 4; r++) {
+                        newBoard[r][c] = column[r];
+                    }
+                }
+            }
+            
+            return newBoard;
+        }
+
+        evaluateBoard(board) {
+            let score = 0;
+            
+            // Empty cells
+            const emptyCells = this.getEmptyCells(board).length;
+            score += emptyCells * 1000;
+            
+            // Smoothness
+            score += this.calculateSmoothness(board) * 100;
+            
+            // Monotonicity
+            score += this.calculateMonotonicity(board) * 500;
+            
+            // Max tile in corner
+            const maxTile = this.getMaxTileBoard(board);
+            if (board[0][0] === maxTile || board[0][3] === maxTile || 
+                board[3][0] === maxTile || board[3][3] === maxTile) {
+                score += maxTile * 10;
+            }
+            
+            return score;
+        }
+
+        calculateSmoothness(board) {
+            let smoothness = 0;
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (board[r][c] !== 0) {
+                        const value = Math.log2(board[r][c]);
+                        // Check right neighbor
+                        if (c < 3 && board[r][c + 1] !== 0) {
+                            smoothness -= Math.abs(value - Math.log2(board[r][c + 1]));
+                        }
+                        // Check down neighbor
+                        if (r < 3 && board[r + 1][c] !== 0) {
+                            smoothness -= Math.abs(value - Math.log2(board[r + 1][c]));
+                        }
+                    }
+                }
+            }
+            return smoothness;
+        }
+
+        calculateMonotonicity(board) {
+            let monotonicity = 0;
+            
+            // Check rows
+            for (let r = 0; r < 4; r++) {
+                let increasing = 0, decreasing = 0;
+                for (let c = 0; c < 3; c++) {
+                    if (board[r][c] <= board[r][c + 1]) increasing++;
+                    if (board[r][c] >= board[r][c + 1]) decreasing++;
+                }
+                monotonicity += Math.max(increasing, decreasing);
+            }
+            
+            // Check columns
+            for (let c = 0; c < 4; c++) {
+                let increasing = 0, decreasing = 0;
+                for (let r = 0; r < 3; r++) {
+                    if (board[r][c] <= board[r + 1][c]) increasing++;
+                    if (board[r][c] >= board[r + 1][c]) decreasing++;
+                }
+                monotonicity += Math.max(increasing, decreasing);
+            }
+            
+            return monotonicity;
+        }
+
+        getEmptyCells(board) {
+            const emptyCells = [];
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (board[r][c] === 0) {
+                        emptyCells.push({r, c});
+                    }
+                }
+            }
+            return emptyCells;
+        }
+
+        getMaxTileBoard(board) {
+            let max = 0;
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    max = Math.max(max, board[r][c]);
+                }
+            }
+            return max;
+        }
+
+        canMoveBoard(board) {
+            // Check for empty cells
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (board[r][c] === 0) return true;
+                }
+            }
+
+            // Check for possible merges
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    const current = board[r][c];
+                    if ((r < 3 && board[r + 1][c] === current) ||
+                        (c < 3 && board[r][c + 1] === current)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        boardsEqual(board1, board2) {
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (board1[r][c] !== board2[r][c]) return false;
+                }
+            }
+            return true;
+        }
+
+        updateDisplay() {
+            const tileContainer = document.getElementById('tile-container');
+            tileContainer.innerHTML = '';
+
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (this.board[r][c] !== 0) {
+                        const tile = document.createElement('div');
+                        tile.className = 'tile';
+                        tile.textContent = this.board[r][c];
+                        
+                        const colors = this.tileColors[this.board[r][c]] || this.tileColors[4096];
+                        tile.style.backgroundColor = colors.bg;
+                        tile.style.color = colors.color;
+                        tile.style.left = `${c * 115}px`;
+                        tile.style.top = `${r * 115}px`;
+                        
+                        tileContainer.appendChild(tile);
+                    }
+                }
+            }
+
+            document.getElementById('game-score').textContent = this.score;
+            document.getElementById('max-tile').textContent = this.getMaxTile();
+            document.getElementById('move-count').textContent = this.moveCount;
+        }
+
+        startAI() {
+            if (this.isAIRunning) return;
+            
+            this.isAIRunning = true;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('pause-btn').disabled = false;
+            document.getElementById('ai-status').textContent = 'AI is thinking...';
+
+            this.aiInterval = setInterval(() => {
+                if (!this.canMove()) {
+                    this.pauseAI();
+                    document.getElementById('ai-status').textContent = 'Game Over!';
+                    return;
+                }
+
+                const bestMove = this.getBestMove();
+                if (bestMove) {
+                    this.move(bestMove);
+                    this.updateDisplay();
+                    document.getElementById('ai-status').textContent = `AI chose: ${bestMove.toUpperCase()}`;
+                }
+            }, 500);
+        }
+
+        pauseAI() {
+            this.isAIRunning = false;
+            if (this.aiInterval) {
+                clearInterval(this.aiInterval);
+                this.aiInterval = null;
+            }
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+            document.getElementById('ai-status').textContent = 'AI paused';
+        }
+
+        stepAI() {
+            if (this.isAIRunning) return;
+            
+            if (!this.canMove()) {
+                document.getElementById('ai-status').textContent = 'Game Over!';
+                return;
+            }
+
+            document.getElementById('ai-status').textContent = 'AI is thinking...';
+            setTimeout(() => {
+                const bestMove = this.getBestMove();
+                if (bestMove) {
+                    this.move(bestMove);
+                    this.updateDisplay();
+                    document.getElementById('ai-status').textContent = `AI chose: ${bestMove.toUpperCase()}`;
+                }
+            }, 100);
+        }
+
+        reset() {
+            this.pauseAI();
+            this.board = Array(4).fill().map(() => Array(4).fill(0));
+            this.score = 0;
+            this.moveCount = 0;
+            this.addRandomTile();
+            this.addRandomTile();
+            this.updateDisplay();
+            document.getElementById('ai-status').textContent = 'Ready to start';
+        }
+    }
+
+    const game2048 = new Game2048();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver - Backtracking Algorithm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ddff;
+            --secondary-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --dark-color: #050810;
+            --neural-pulse: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .game-container {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .game-area {
+            background: rgba(5, 8, 16, 0.8);
+            border: 2px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sudoku-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .solver-status {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 3px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 221, 255, 0.4);
+            position: relative;
+        }
+
+        .sudoku-cell {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(5, 8, 16, 0.9) 100%);
+            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            aspect-ratio: 1;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            border: 2px solid rgba(0, 221, 255, 0.2);
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .sudoku-cell:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 221, 255, 0.5);
+        }
+
+        .sudoku-cell.given {
+            color: var(--primary-color);
+            font-weight: 900;
+            background: linear-gradient(135deg, rgba(0, 221, 255, 0.1), rgba(76, 205, 196, 0.1));
+        }
+
+        .sudoku-cell.solved {
+            color: var(--accent-color);
+            background: linear-gradient(135deg, rgba(76, 205, 196, 0.2), rgba(0, 255, 136, 0.2));
+        }
+
+        .sudoku-cell.trying {
+            background: linear-gradient(135deg, rgba(255, 255, 0, 0.6), rgba(255, 215, 0, 0.4));
+            color: var(--dark-color);
+            transform: scale(1.15);
+            animation: pulse-trying 0.5s ease-in-out;
+        }
+
+        .sudoku-cell.backtrack {
+            background: linear-gradient(135deg, rgba(255, 0, 128, 0.6), rgba(255, 107, 107, 0.4));
+            color: white;
+            transform: scale(0.9);
+            animation: pulse-backtrack 0.5s ease-in-out;
+        }
+
+        .sudoku-cell.final-solve {
+            background: linear-gradient(135deg, var(--accent-color), var(--neural-pulse));
+            color: var(--dark-color);
+            animation: celebration 0.8s ease-in-out;
+            font-weight: 900;
+        }
+
+        /* Sudoku Grid Lines */
+        .sudoku-cell:nth-child(3n):not(:nth-child(9n)) {
+            border-right: 4px solid var(--primary-color);
+        }
+
+        .sudoku-cell:nth-child(n+19):nth-child(-n+27),
+        .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        @keyframes pulse-trying {
+            0%, 100% { transform: scale(1.15); }
+            50% { transform: scale(1.25); }
+        }
+
+        @keyframes pulse-backtrack {
+            0%, 100% { transform: scale(0.9); }
+            50% { transform: scale(0.8); }
+        }
+
+        @keyframes celebration {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.15) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(76, 205, 196, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-color: var(--accent-color);
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(0, 255, 136, 0.3));
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .speed-slider {
+            appearance: none;
+            width: 150px;
+            height: 6px;
+            background: rgba(0, 221, 255, 0.3);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .stat-item {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .algorithm-section {
+            background: rgba(5, 8, 16, 0.8);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .algorithm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .game-name {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .game-navbar {
+                padding: 1rem;
+            }
+            
+            .sudoku-cell {
+                font-size: 1rem;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="game-navbar">
+        <div class="game-title">🧩 Sudoku Solver</div>
+        <div class="nav-buttons">
+            <a href="games.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Back to Games
+            </a>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <div class="game-header">
+            <span class="game-icon">🧩</span>
+            <h1 class="game-name">Sudoku Solver</h1>
+            <p class="game-description">
+                Watch the backtracking algorithm solve Sudoku puzzles step by step. 
+                The AI systematically tries numbers and backtracks when it hits dead ends.
+            </p>
+        </div>
+
+        <div class="game-area">
+            <div class="sudoku-container">
+                <div class="solver-status" id="solver-status">Ready to solve</div>
+
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="sudokuSolver.setDifficulty('easy')" id="easy-btn">Easy</button>
+                    <button class="difficulty-btn" onclick="sudokuSolver.setDifficulty('medium')" id="medium-btn">Medium</button>
+                    <button class="difficulty-btn" onclick="sudokuSolver.setDifficulty('hard')" id="hard-btn">Hard</button>
+                    <button class="difficulty-btn" onclick="sudokuSolver.setDifficulty('expert')" id="expert-btn">Expert</button>
+                </div>
+
+                <div class="speed-control">
+                    <span>Speed:</span>
+                    <input type="range" min="1" max="100" value="50" class="speed-slider" id="speed-slider">
+                    <span id="speed-value">50ms</span>
+                </div>
+
+                <div class="sudoku-grid" id="sudoku-grid"></div>
+
+                <div class="game-controls">
+                    <button class="control-btn" onclick="sudokuSolver.generatePuzzle()" id="generate-btn">New Puzzle</button>
+                    <button class="control-btn" onclick="sudokuSolver.solve(true)" id="solve-btn">Solve</button>
+                    <button class="control-btn" onclick="sudokuSolver.pause()" id="pause-btn" disabled>Pause</button>
+                    <button class="control-btn" onclick="sudokuSolver.reset()" id="reset-btn">Reset</button>
+                    <button class="control-btn" onclick="sudokuSolver.clearBoard()">Clear All</button>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="sudoku-filled">0/81</span>
+                        <span class="stat-label">Filled</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="sudoku-steps">0</span>
+                        <span class="stat-label">Steps</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="sudoku-time">0ms</span>
+                        <span class="stat-label">Time</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="sudoku-difficulty">Easy</span>
+                        <span class="stat-label">Difficulty</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="sudoku-backtracks">0</span>
+                        <span class="stat-label">Backtracks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-section">
+            <h2 class="algorithm-title">Backtracking Algorithm</h2>
+            <div class="algorithm-content">
+                <p>Backtracking is a powerful algorithmic technique for solving problems recursively by trying to build a solution incrementally. It removes solutions that fail to satisfy the constraints of the problem at any point in time.</p>
+                
+                <br>
+                
+                <p><strong>How it works in Sudoku:</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Find Empty Cell:</strong> Locate the next empty cell in the grid</li>
+                    <li><strong>Try Numbers:</strong> Attempt to place numbers 1-9 in the cell</li>
+                    <li><strong>Validate:</strong> Check if the number is valid (no conflicts in row, column, or 3x3 box)</li>
+                    <li><strong>Recurse:</strong> If valid, move to the next empty cell and repeat</li>
+                    <li><strong>Backtrack:</strong> If no valid number works, remove the current number and try the next one</li>
+                </ul>
+
+                <br>
+
+                <p><strong>Algorithm Features:</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Systematic Search:</strong> Explores all possibilities methodically</li>
+                    <li><strong>Constraint Satisfaction:</strong> Respects Sudoku rules at each step</li>
+                    <li><strong>Pruning:</strong> Eliminates invalid paths early to improve efficiency</li>
+                    <li><strong>Guaranteed Solution:</strong> Will find a solution if one exists</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    class SudokuSolver {
+        constructor() {
+            this.gridElement = document.getElementById('sudoku-grid');
+            this.grid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.originalGrid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.solutionGrid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.isRunning = false;
+            this.isPaused = false;
+            this.solveSteps = 0;
+            this.backtrackCount = 0;
+            this.startTime = 0;
+            this.endTime = 0;
+            this.animationSpeed = 50;
+            this.difficulty = 'easy';
+            this.cellElements = [];
+            
+            this.difficultySettings = {
+                easy: { cellsToRemove: 35 },
+                medium: { cellsToRemove: 45 },
+                hard: { cellsToRemove: 55 },
+                expert: { cellsToRemove: 65 }
+            };
+
+            this.setupEventListeners();
+            this.init();
+        }
+
+        setupEventListeners() {
+            const speedSlider = document.getElementById('speed-slider');
+            speedSlider.addEventListener('input', (e) => {
+                this.animationSpeed = 101 - parseInt(e.target.value);
+                document.getElementById('speed-value').textContent = `${this.animationSpeed}ms`;
+            });
+        }
+
+        init() {
+            this.gridElement.innerHTML = '';
+            this.cellElements = [];
+            
+            for (let i = 0; i < 81; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'sudoku-cell';
+                cell.addEventListener('click', () => this.handleCellClick(i));
+                this.gridElement.appendChild(cell);
+                this.cellElements.push(cell);
+            }
+            
+            this.generatePuzzle();
+        }
+
+        handleCellClick(index) {
+            if (this.isRunning) return;
+            
+            const row = Math.floor(index / 9);
+            const col = index % 9;
+            
+            if (this.originalGrid[row][col] !== 0) return; // Can't modify given numbers
+            
+            // Cycle through numbers 0-9
+            this.grid[row][col] = (this.grid[row][col] + 1) % 10;
+            this.updateDisplay();
+        }
+
+        setDifficulty(difficulty) {
+            if (this.isRunning) return;
+            
+            this.difficulty = difficulty;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`${difficulty}-btn`).classList.add('active');
+            document.getElementById('sudoku-difficulty').textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        }
+
+        generatePuzzle() {
+            if (this.isRunning) return;
+            
+            // Reset grids
+            this.grid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.solutionGrid = Array(9).fill(null).map(() => Array(9).fill(0));
+            
+            // Generate a complete valid solution
+            this.fillGrid(this.solutionGrid);
+            
+            // Copy solution to current grid
+            this.grid = this.solutionGrid.map(row => [...row]);
+            
+            // Remove cells based on difficulty
+            const cellsToRemove = this.difficultySettings[this.difficulty].cellsToRemove;
+            this.removeCells(cellsToRemove);
+            
+            // Store the puzzle state
+            this.originalGrid = this.grid.map(row => [...row]);
+            
+            this.resetStats();
+            this.updateDisplay();
+            this.draw();
+        }
+
+        fillGrid(grid) {
+            const find = this.findEmpty(grid);
+            if (!find) return true;
+            
+            const [row, col] = find;
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+            
+            for (let num of numbers) {
+                if (this.isValidMove(grid, row, col, num)) {
+                    grid[row][col] = num;
+                    if (this.fillGrid(grid)) return true;
+                    grid[row][col] = 0;
+                }
+            }
+            return false;
+        }
+
+        removeCells(count) {
+            let removed = 0;
+            while (removed < count) {
+                const row = Math.floor(Math.random() * 9);
+                const col = Math.floor(Math.random() * 9);
+                
+                if (this.grid[row][col] !== 0) {
+                    const backup = this.grid[row][col];
+                    this.grid[row][col] = 0;
+                    
+                    // Ensure puzzle still has unique solution
+                    if (this.hasUniqueSolution()) {
+                        removed++;
+                    } else {
+                        this.grid[row][col] = backup;
+                    }
+                }
+            }
+        }
+
+        hasUniqueSolution() {
+            const testGrid = this.grid.map(row => [...row]);
+            let solutionCount = 0;
+            
+            const solve = (grid) => {
+                if (solutionCount > 1) return false;
+                
+                const find = this.findEmpty(grid);
+                if (!find) {
+                    solutionCount++;
+                    return solutionCount <= 1;
+                }
+                
+                const [row, col] = find;
+                for (let num = 1; num <= 9; num++) {
+                    if (this.isValidMove(grid, row, col, num)) {
+                        grid[row][col] = num;
+                        if (!solve(grid)) {
+                            grid[row][col] = 0;
+                            return false;
+                        }
+                        grid[row][col] = 0;
+                    }
+                }
+                return true;
+            };
+            
+            solve(testGrid);
+            return solutionCount === 1;
+        }
+
+        isValidMove(grid, row, col, num) {
+            // Check row
+            for (let c = 0; c < 9; c++) {
+                if (grid[row][c] === num) return false;
+            }
+            
+            // Check column
+            for (let r = 0; r < 9; r++) {
+                if (grid[r][col] === num) return false;
+            }
+            
+            // Check 3x3 box
+            const boxRowStart = row - row % 3;
+            const boxColStart = col - col % 3;
+            for (let r = boxRowStart; r < boxRowStart + 3; r++) {
+                for (let c = boxColStart; c < boxColStart + 3; c++) {
+                    if (grid[r][c] === num) return false;
+                }
+            }
+            
+            return true;
+        }
+
+        async solve(visualize = true) {
+            if (this.isRunning) return;
+            
+            this.isRunning = true;
+            this.isPaused = false;
+            this.resetStats();
+            this.startTime = Date.now();
+            
+            document.getElementById('solve-btn').disabled = true;
+            document.getElementById('pause-btn').disabled = false;
+            document.getElementById('solver-status').textContent = 'Solving...';
+            
+            const result = await this.backtrackSolve(this.grid, visualize);
+            
+            this.endTime = Date.now();
+            this.isRunning = false;
+            
+            document.getElementById('solve-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+            
+            if (result) {
+                document.getElementById('solver-status').textContent = 'Solved!';
+                if (visualize) await this.celebrateSolution();
+            } else {
+                document.getElementById('solver-status').textContent = 'No solution found';
+            }
+            
+            this.updateDisplay();
+        }
+
+        async backtrackSolve(grid, visualize) {
+            if (this.isPaused) {
+                while (this.isPaused && this.isRunning) {
+                    await this.sleep(100);
+                }
+            }
+            
+            if (!this.isRunning) return false;
+            
+            const find = this.findEmpty(grid);
+            if (!find) {
+                this.updateDisplay(true);
+                return true;
+            }
+            
+            const [row, col] = find;
+            
+            for (let num = 1; num <= 9; num++) {
+                if (!this.isRunning) return false;
+                
+                if (this.isValidMove(grid, row, col, num)) {
+                    grid[row][col] = num;
+                    this.solveSteps++;
+                    
+                    if (visualize) {
+                        this.highlightCell(row, col, 'trying');
+                        this.updateDisplay();
+                        await this.sleep(this.animationSpeed);
+                    }
+                    
+                    if (await this.backtrackSolve(grid, visualize)) {
+                        if (visualize) this.highlightCell(row, col, 'final-solve');
+                        return true;
+                    }
+                    
+                    // Backtrack
+                    grid[row][col] = 0;
+                    this.backtrackCount++;
+                    
+                    if (visualize) {
+                        this.highlightCell(row, col, 'backtrack');
+                        await this.sleep(this.animationSpeed);
+                    }
+                }
+            }
+            
+            return false;
+        }
+
+        findEmpty(grid) {
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (grid[r][c] === 0) return [r, c];
+                }
+            }
+            return null;
+        }
+
+        async celebrateSolution() {
+            for (let i = 0; i < this.cellElements.length; i++) {
+                const cell = this.cellElements[i];
+                const row = Math.floor(i / 9);
+                const col = i % 9;
+                
+                if (this.originalGrid[row][col] === 0) {
+                    cell.classList.add('final-solve');
+                    await this.sleep(30);
+                }
+            }
+            
+            setTimeout(() => {
+                this.cellElements.forEach(cell => {
+                    cell.classList.remove('final-solve');
+                });
+                this.draw();
+            }, 2000);
+        }
+
+        highlightCell(row, col, type) {
+            const index = row * 9 + col;
+            const cell = this.cellElements[index];
+            
+            // Remove previous highlights
+            cell.classList.remove('trying', 'backtrack', 'final-solve');
+            
+            // Add new highlight
+            cell.classList.add(type);
+            
+            // Update cell content
+            cell.textContent = this.grid[row][col] || '';
+            
+            // Remove highlight after animation
+            setTimeout(() => {
+                if (type !== 'final-solve') {
+                    cell.classList.remove(type);
+                }
+            }, this.animationSpeed * 2);
+        }
+
+        pause() {
+            if (!this.isRunning) return;
+            
+            this.isPaused = !this.isPaused;
+            
+            if (this.isPaused) {
+                document.getElementById('pause-btn').textContent = 'Resume';
+                document.getElementById('solver-status').textContent = 'Paused';
+            } else {
+                document.getElementById('pause-btn').textContent = 'Pause';
+                document.getElementById('solver-status').textContent = 'Solving...';
+            }
+        }
+
+        reset() {
+            this.isRunning = false;
+            this.isPaused = false;
+            this.grid = this.originalGrid.map(row => [...row]);
+            this.resetStats();
+            this.updateDisplay();
+            this.draw();
+            
+            document.getElementById('solve-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+            document.getElementById('pause-btn').textContent = 'Pause';
+            document.getElementById('solver-status').textContent = 'Ready to solve';
+        }
+
+        clearBoard() {
+            if (this.isRunning) return;
+            
+            this.grid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.originalGrid = Array(9).fill(null).map(() => Array(9).fill(0));
+            this.resetStats();
+            this.updateDisplay();
+            this.draw();
+            
+            document.getElementById('solver-status').textContent = 'Board cleared';
+        }
+
+        resetStats() {
+            this.solveSteps = 0;
+            this.backtrackCount = 0;
+            this.startTime = 0;
+            this.endTime = 0;
+        }
+
+        updateDisplay(finished = false) {
+            const filledCount = this.grid.flat().filter(cell => cell !== 0).length;
+            document.getElementById('sudoku-filled').textContent = `${filledCount}/81`;
+            document.getElementById('sudoku-steps').textContent = this.solveSteps;
+            document.getElementById('sudoku-backtracks').textContent = this.backtrackCount;
+            
+            const time = finished && this.endTime ? 
+                (this.endTime - this.startTime) : 
+                (this.startTime ? (Date.now() - this.startTime) : 0);
+            document.getElementById('sudoku-time').textContent = `${time}ms`;
+        }
+
+        draw() {
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    const index = r * 9 + c;
+                    const cell = this.cellElements[index];
+                    
+                    cell.textContent = this.grid[r][c] || '';
+                    cell.className = 'sudoku-cell';
+                    
+                    if (this.originalGrid[r][c] !== 0) {
+                        cell.classList.add('given');
+                    } else if (this.grid[r][c] !== 0) {
+                        cell.classList.add('solved');
+                    }
+                }
+            }
+        }
+
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    }
+
+    const sudokuSolver = new SudokuSolver();
+    </script>
+</body>
+</html> 

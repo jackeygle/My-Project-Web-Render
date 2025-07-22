@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills :: Xinle Zhang - AI & Robotics Portfolio</title>
+  <meta name="description" content="Technical Skills - Xinle Zhang, expertise in AI, Machine Learning, Robotics, and Programming">
+  <meta name="keywords" content="Skills, AI, Machine Learning, Robotics, Python, Programming, KTH">
+  <meta name="author" content="Xinle Zhang">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Electrolize:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --secondary-color: #ff0080;
+      --accent-color: #00ff88;
+      --dark-color: #050810;
+      --dark-blue: #0a1628;
+      --text-glow: 0 0 10px rgba(0, 221, 255, 0.5);
+      --grid-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Electrolize', sans-serif;
+      background: linear-gradient(135deg, var(--dark-color) 0%, var(--dark-blue) 100%);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+      padding-top: 100px;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 221, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 221, 255, 0.1) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(var(--grid-size), var(--grid-size)); }
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: all 0.3s ease;
+      text-shadow: var(--text-glow);
+    }
+
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .nav-link.active {
+      color: var(--accent-color) !important;
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding: 2rem 0;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .skill-category {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-category:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 15px 40px rgba(0, 221, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .skill-category::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    }
+
+    .skill-category-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .skill-category-icon {
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+
+    /* Skill Items */
+    .skill-items {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .skill-item {
+      background: rgba(0, 221, 255, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .skill-item:hover {
+      background: rgba(0, 221, 255, 0.1);
+      border-color: var(--primary-color);
+      transform: translateX(5px);
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .skill-name {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-level {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary-color);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .skill-description {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    /* Progress Bar */
+    .skill-progress {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .skill-progress-bar {
+      height: 100%;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border-radius: 4px;
+      transition: width 2s ease-in-out;
+      position: relative;
+    }
+
+    .skill-progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Skill Tags */
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--accent-color);
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+      background: rgba(0, 255, 136, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Language Skills */
+    .language-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .language-item {
+      background: rgba(0, 221, 255, 0.1);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .language-item:hover {
+      background: rgba(0, 221, 255, 0.15);
+      transform: translateY(-5px);
+      border-color: var(--primary-color);
+    }
+
+    .language-flag {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .language-name {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .language-level {
+      color: var(--accent-color);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(20px);
+      margin-bottom: 3rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(0, 221, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      background: rgba(0, 221, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent-color);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary-color);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(5, 8, 16, 0.9);
+      border-top: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 2rem 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-title {
+        font-size: 2.5rem;
+      }
+      
+      .skill-category {
+        padding: 2rem;
+      }
+      
+      .language-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-animation">
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">[ AI // Xinle Zhang ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html"><i class="fas fa-user me-2"></i>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html"><i class="fas fa-code me-2"></i>Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="skills.html"><i class="fas fa-cog me-2"></i>Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="resume.html"><i class="fas fa-file-pdf me-2"></i>Resume</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="games.html"><i class="fas fa-gamepad me-2"></i>Games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Philosophy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header" data-aos="fade-up">
+      <h1 class="page-title">Technical Arsenal</h1>
+      <p class="page-subtitle">// Skill Matrix Database</p>
+    </div>
+
+    <!-- Skills Statistics -->
+    <div class="stats-section" data-aos="fade-up">
+      <h2 style="font-family: 'Orbitron', sans-serif; color: var(--primary-color); text-align: center; margin-bottom: 1rem;">
+        Skills Overview
+      </h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Programming Languages</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">AI/ML Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Robotics Platforms</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Languages Spoken</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills-grid">
+      
+      <!-- AI & Machine Learning -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+        <h2 class="skill-category-title">
+          <i class="fas fa-brain skill-category-icon"></i>
+          AI & Machine Learning
+        </h2>
+        <div class="skill-items">
+          
+          <div class="skill-item">
+            <div class="skill-name">Neural Networks & Deep Learning</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Comprehensive understanding of neural network architectures, backpropagation, 
+              and optimization techniques. Experience with CNNs, RNNs, and attention mechanisms.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">PyTorch</span>
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">Keras</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Machine Learning Algorithms</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Solid foundation in classification, regression, SVM, Bayesian learning, 
+              decision trees, and ensemble methods.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Scikit-learn</span>
+              <span class="skill-tag">NumPy</span>
+              <span class="skill-tag">Pandas</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Data Science & Analysis</div>
+            <div class="skill-level">Intermediate</div>
+            <div class="skill-description">
+              Experience with data preprocessing, feature engineering, statistical analysis, 
+              and data visualization techniques.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 75%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Matplotlib</span>
+              <span class="skill-tag">Seaborn</span>
+              <span class="skill-tag">Jupyter</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Robotics & Systems -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="skill-category-title">
+          <i class="fas fa-robot skill-category-icon"></i>
+          Robotics & Systems
+        </h2>
+        <div class="skill-items">
+          
+          <div class="skill-item">
+            <div class="skill-name">ROS (Robot Operating System)</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Hands-on experience with ROS for autonomous robot manipulation, 
+              including node communication, service calls, and action servers.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">ROS</span>
+              <span class="skill-tag">Gazebo</span>
+              <span class="skill-tag">RViz</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Navigation & SLAM</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Implementation of particle filter algorithms for localization, 
+              mapping, and autonomous navigation in dynamic environments.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Particle Filters</span>
+              <span class="skill-tag">SLAM</span>
+              <span class="skill-tag">Path Planning</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Control Systems</div>
+            <div class="skill-level">Intermediate</div>
+            <div class="skill-description">
+              Understanding of robot kinematics, dynamics, and control theory 
+              for autonomous system design and implementation.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 70%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Kinematics</span>
+              <span class="skill-tag">PID Control</span>
+              <span class="skill-tag">Motion Planning</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Programming Languages -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+        <h2 class="skill-category-title">
+          <i class="fas fa-code skill-category-icon"></i>
+          Programming Languages
+        </h2>
+        <div class="skill-items">
+          
+          <div class="skill-item">
+            <div class="skill-name">Python</div>
+            <div class="skill-level">Expert</div>
+            <div class="skill-description">
+              Primary language for AI/ML development, robotics programming, 
+              and data science applications. Extensive experience with scientific libraries.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 90%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Object-Oriented</span>
+              <span class="skill-tag">Async/Await</span>
+              <span class="skill-tag">Testing</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">JavaScript</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Strong proficiency in modern JavaScript for web development, 
+              algorithm visualization, and interactive applications.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">ES6+</span>
+              <span class="skill-tag">Canvas API</span>
+              <span class="skill-tag">DOM Manipulation</span>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+
+      <!-- AI-Assisted Development -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
+        <h2 class="skill-category-title">
+          <i class="fas fa-magic skill-category-icon"></i>
+          AI-Assisted Development
+        </h2>
+        <div class="skill-items">
+          
+          <div class="skill-item">
+            <div class="skill-name">Large Language Models</div>
+            <div class="skill-level">Expert</div>
+            <div class="skill-description">
+              Proficient in leveraging AI models for code generation, debugging, 
+              optimization, and technical problem-solving.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 95%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">ChatGPT</span>
+              <span class="skill-tag">Claude</span>
+              <span class="skill-tag">Grok</span>
+              <span class="skill-tag">DeepSeek</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Code Optimization</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Using AI tools for performance analysis, refactoring, 
+              and implementing best practices in software development.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Debugging</span>
+              <span class="skill-tag">Refactoring</span>
+              <span class="skill-tag">Best Practices</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Algorithm Design</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Collaborative development of complex algorithms with AI assistance, 
+              including pathfinding, optimization, and game AI.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">A* Algorithm</span>
+              <span class="skill-tag">Minimax</span>
+              <span class="skill-tag">Backtracking</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Web Technologies -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="500">
+        <h2 class="skill-category-title">
+          <i class="fas fa-globe skill-category-icon"></i>
+          Web Technologies
+        </h2>
+        <div class="skill-items">
+          
+          <div class="skill-item">
+            <div class="skill-name">Frontend Development</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Modern web development with responsive design, animations, 
+              and interactive user interfaces.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">HTML5</span>
+              <span class="skill-tag">CSS3</span>
+              <span class="skill-tag">Bootstrap</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Version Control</div>
+            <div class="skill-level">Advanced</div>
+            <div class="skill-description">
+              Proficient with Git for code versioning, collaboration, 
+              and project management.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">GitHub</span>
+              <span class="skill-tag">Collaboration</span>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Database Systems</div>
+            <div class="skill-level">Intermediate</div>
+            <div class="skill-description">
+              Understanding of database design, SQL queries, 
+              and data management for applications.
+            </div>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 70%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">SQL</span>
+              <span class="skill-tag">Firebase</span>
+              <span class="skill-tag">NoSQL</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Language Skills -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="600">
+        <h2 class="skill-category-title">
+          <i class="fas fa-language skill-category-icon"></i>
+          Language Proficiency
+        </h2>
+        <div class="language-grid">
+          
+          <div class="language-item">
+            <div class="language-flag">🇺🇸</div>
+            <div class="language-name">English</div>
+            <div class="language-level">Professional Working</div>
+          </div>
+
+          <div class="language-item">
+            <div class="language-flag">🇨🇳</div>
+            <div class="language-name">Chinese (Mandarin)</div>
+            <div class="language-level">Native</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Xinle Zhang // AI & Robotics Portfolio // Technical Arsenal Operational</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Typing effect for page subtitle
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    // Initialize typing effect
+    window.addEventListener('load', function() {
+      const subtitle = document.querySelector('.page-subtitle');
+      if (subtitle) {
+        const originalText = subtitle.textContent;
+        typeWriter(subtitle, originalText, 150);
+      }
+    });
+
+    // Animate progress bars when they come into view
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const progressBar = entry.target.querySelector('.skill-progress-bar');
+          if (progressBar) {
+            const targetWidth = progressBar.style.width;
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+              progressBar.style.width = targetWidth;
+            }, 200);
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all skill items for progress bar animation
+    document.querySelectorAll('.skill-item').forEach(item => {
+      progressObserver.observe(item);
+    });
+
+    // Enhanced hover effects
+    document.querySelectorAll('.skill-category').forEach(category => {
+      category.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px)';
+      });
+      
+      category.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+    });
+
+    // Animate stats on scroll
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statNumber = entry.target.querySelector('.stat-number');
+          const finalNumber = statNumber.textContent;
+          const isPlus = finalNumber.includes('+');
+          const numericValue = parseInt(finalNumber.replace('+', ''));
+          
+          let currentNumber = 0;
+          const increment = Math.ceil(numericValue / 30);
+          
+          const countAnimation = setInterval(() => {
+            currentNumber += increment;
+            if (currentNumber >= numericValue) {
+              currentNumber = numericValue;
+              clearInterval(countAnimation);
+            }
+            statNumber.textContent = currentNumber + (isPlus ? '+' : '');
+          }, 50);
+        }
+      });
+    }, { threshold: 0.7 });
+
+    // Observe stat items for number animation
+    document.querySelectorAll('.stat-item').forEach(stat => {
+      statsObserver.observe(stat);
+    });
+  </script>
+</body>
+</html> 

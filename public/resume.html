@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume :: Xinle Zhang - AI & Robotics Portfolio</title>
+  <meta name="description" content="Resume - Xinle Zhang, Master's student in Autonomous Systems and Intelligent Robotics">
+  <meta name="keywords" content="Resume, CV, Xinle Zhang, AI, Robotics, KTH, EIT Digital">
+  <meta name="author" content="Xinle Zhang">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Electrolize:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --secondary-color: #ff0080;
+      --accent-color: #00ff88;
+      --dark-color: #050810;
+      --dark-blue: #0a1628;
+      --text-glow: 0 0 10px rgba(0, 221, 255, 0.5);
+      --grid-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Electrolize', sans-serif;
+      background: linear-gradient(135deg, var(--dark-color) 0%, var(--dark-blue) 100%);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+      padding-top: 100px;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 221, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 221, 255, 0.1) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(var(--grid-size), var(--grid-size)); }
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: all 0.3s ease;
+      text-shadow: var(--text-glow);
+    }
+
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .nav-link.active {
+      color: var(--accent-color) !important;
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* Download Section */
+    .download-section {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .btn-download {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border: none;
+      color: var(--dark-color);
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.4);
+      color: var(--dark-color);
+      text-decoration: none;
+    }
+
+    /* Resume Container */
+    .resume-container {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resume-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    }
+
+    /* Resume Header */
+    .resume-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+    }
+
+    .resume-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .resume-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .resume-contact {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    .contact-icon {
+      color: var(--accent-color);
+      font-size: 1rem;
+    }
+
+    /* Resume Sections */
+    .resume-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-icon {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+    }
+
+    /* Education */
+    .education-item {
+      background: rgba(0, 221, 255, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .education-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+      border-radius: 0 0 0 15px;
+    }
+
+    .education-degree {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .education-school {
+      color: var(--accent-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .education-date {
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .education-description {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    /* Projects */
+    .project-item {
+      background: rgba(0, 255, 136, 0.05);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .project-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent-color);
+      border-radius: 0 0 0 15px;
+    }
+
+    .project-name {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .tech-tag {
+      background: rgba(0, 221, 255, 0.2);
+      color: var(--primary-color);
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(0, 221, 255, 0.3);
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-category {
+      background: rgba(0, 221, 255, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+    }
+
+    .skill-category-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--accent-color);
+      padding: 0.3rem 0.6rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Languages */
+    .languages-list {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .language-item {
+      background: rgba(0, 221, 255, 0.1);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+
+    .language-name {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .language-level {
+      color: var(--accent-color);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(5, 8, 16, 0.9);
+      border-top: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 2rem 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2.5rem;
+      }
+      
+      .resume-container {
+        padding: 2rem;
+      }
+      
+      .resume-contact {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+      }
+      
+      .navbar, .bg-animation, .download-section, .footer {
+        display: none !important;
+      }
+      
+      .resume-container {
+        background: white !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      
+      .resume-name, .section-title, .education-degree, .project-name {
+        color: #333 !important;
+      }
+      
+      .page-title, .page-subtitle {
+        display: none !important;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-animation">
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">[ AI // Xinle Zhang ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html"><i class="fas fa-user me-2"></i>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html"><i class="fas fa-code me-2"></i>Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="skills.html"><i class="fas fa-cog me-2"></i>Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="resume.html"><i class="fas fa-file-pdf me-2"></i>Resume</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="games.html"><i class="fas fa-gamepad me-2"></i>Games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Philosophy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header" data-aos="fade-up">
+      <h1 class="page-title">Resume Archive</h1>
+      <p class="page-subtitle">// Professional Documentation</p>
+    </div>
+
+    <!-- Download Section -->
+    <div class="download-section" data-aos="fade-up">
+      <h3 style="color: var(--accent-color); font-family: 'Orbitron', sans-serif; margin-bottom: 1rem;">
+        Download Options
+      </h3>
+      <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem;">
+        Get a copy of my complete resume in your preferred format
+      </p>
+      <div>
+        <a href="https://firebasestorage.googleapis.com/v0/b/jackeysproject.firebasestorage.app/o/xinle.pdf?alt=media&token=af7f0663-bf5e-4393-9599-b70fa0f59e46" target="_blank" class="btn-download" download="Xinle_Zhang_Resume.pdf">
+          <i class="fas fa-download"></i> Download PDF
+        </a>
+        <a href="#" class="btn-download" onclick="window.print()">
+          <i class="fas fa-print"></i> Print Resume
+        </a>
+      </div>
+    </div>
+
+    <!-- Resume Container -->
+    <div class="resume-container" data-aos="fade-up" data-aos-delay="200">
+      
+      <!-- Resume Header -->
+      <div class="resume-header">
+        <h1 class="resume-name">Xinle Zhang</h1>
+        <h2 class="resume-title">AI & Robotics Engineer</h2>
+        <div class="resume-contact">
+          <div class="contact-item">
+            <i class="fas fa-envelope contact-icon"></i>
+            <span>jackeygle@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone contact-icon"></i>
+            <span>(+46) 793395619</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt contact-icon"></i>
+            <span>Stockholm, Sweden</span>
+          </div>
+          <div class="contact-item">
+            <i class="fab fa-github contact-icon"></i>
+            <span>github.com/jackeygle</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-globe contact-icon"></i>
+            <span>jackeysproject.web.app</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Section -->
+      <div class="resume-section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap section-icon"></i>
+          Education
+        </h2>
+        
+        <div class="education-item">
+          <h3 class="education-degree">Master's in Autonomous Systems and Intelligent Robotics</h3>
+          <div class="education-school">EIT Digital Master School</div>
+          <div class="education-date">August 2024 - Present</div>
+          <div class="education-description">
+            Dual-degree program starting at KTH Royal Institute of Technology, Stockholm, Sweden. 
+            Expected to complete the second year at Aalto University, Finland. Specialization in 
+            advanced AI algorithms, robotics systems, sensor data processing, and autonomous system design.
+            <br><br>
+            <strong>Current Location:</strong> Stockholm, Sweden<br>
+            <strong>Key Focus Areas:</strong> Python programming, AI algorithms, sensor data processing, system design
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Projects Section -->
+      <div class="resume-section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram section-icon"></i>
+          Key Projects
+        </h2>
+        
+        <div class="project-item">
+          <h3 class="project-name">Autonomous Robot Manipulation Project</h3>
+          <div class="education-date">Fall 2024 - DD2410 Introduction to Robotics, KTH</div>
+          <div class="project-tech">
+            <span class="tech-tag">ROS</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Particle Filters</span>
+            <span class="tech-tag">SLAM</span>
+            <span class="tech-tag">Motion Planning</span>
+          </div>
+          <div class="education-description">
+            Programmed a robot using ROS and Python to autonomously pick and place blocks. 
+            Enhanced the robot's navigation precision in dynamic environments by implementing 
+            particle filter algorithms for localization and mapping. Gained hands-on experience 
+            with robot kinematics, dynamics, path planning, and control systems.
+          </div>
+        </div>
+
+        <div class="project-item">
+          <h3 class="project-name">Deep Learning in Data Science</h3>
+          <div class="education-date">Fall 2024 - DD2424, KTH</div>
+          <div class="project-tech">
+            <span class="tech-tag">PyTorch</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">Neural Networks</span>
+            <span class="tech-tag">CNN</span>
+            <span class="tech-tag">Data Science</span>
+          </div>
+          <div class="education-description">
+            Comprehensive exploration of deep learning architectures, optimization algorithms, 
+            and regularization techniques. Implemented neural networks from scratch and applied 
+            them to real-world data science problems, covering the complete learning path from 
+            basic perceptrons to complex convolutional neural networks.
+          </div>
+        </div>
+
+        <div class="project-item">
+          <h3 class="project-name">AI Algorithm Visualizations</h3>
+          <div class="education-date">2024 - Personal Project</div>
+          <div class="project-tech">
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">A* Algorithm</span>
+            <span class="tech-tag">Minimax</span>
+            <span class="tech-tag">Backtracking</span>
+            <span class="tech-tag">Canvas API</span>
+          </div>
+          <div class="education-description">
+            Developed interactive web applications demonstrating AI algorithms including A* pathfinding, 
+            Minimax with alpha-beta pruning, cellular automata, and backtracking algorithms. 
+            Features real-time visualizations and educational components to help others understand 
+            complex algorithmic concepts.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Technical Skills Section -->
+      <div class="resume-section">
+        <h2 class="section-title">
+          <i class="fas fa-cogs section-icon"></i>
+          Technical Skills
+        </h2>
+        
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h4 class="skill-category-title">Programming Languages</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">HTML/CSS</span>
+              <span class="skill-tag">SQL</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4 class="skill-category-title">AI & Machine Learning</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Neural Networks</span>
+              <span class="skill-tag">Deep Learning</span>
+              <span class="skill-tag">PyTorch</span>
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">Scikit-learn</span>
+              <span class="skill-tag">SVM</span>
+              <span class="skill-tag">Bayesian Learning</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4 class="skill-category-title">Robotics & Systems</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">ROS</span>
+              <span class="skill-tag">Particle Filters</span>
+              <span class="skill-tag">SLAM</span>
+              <span class="skill-tag">Path Planning</span>
+              <span class="skill-tag">Control Systems</span>
+              <span class="skill-tag">Kinematics</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4 class="skill-category-title">AI-Assisted Development</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">ChatGPT</span>
+              <span class="skill-tag">Claude</span>
+              <span class="skill-tag">Grok</span>
+              <span class="skill-tag">DeepSeek</span>
+              <span class="skill-tag">Code Optimization</span>
+              <span class="skill-tag">Debugging</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4 class="skill-category-title">Tools & Technologies</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">GitHub</span>
+              <span class="skill-tag">Jupyter</span>
+              <span class="skill-tag">VS Code</span>
+              <span class="skill-tag">Firebase</span>
+              <span class="skill-tag">Bootstrap</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4 class="skill-category-title">Specializations</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Algorithm Design</span>
+              <span class="skill-tag">Data Structures</span>
+              <span class="skill-tag">Computer Vision</span>
+              <span class="skill-tag">Sensor Fusion</span>
+              <span class="skill-tag">System Integration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages Section -->
+      <div class="resume-section">
+        <h2 class="section-title">
+          <i class="fas fa-language section-icon"></i>
+          Languages
+        </h2>
+        
+        <div class="languages-list">
+          <div class="language-item">
+            <div class="language-name">Chinese (Mandarin)</div>
+            <div class="language-level">Native</div>
+          </div>
+          <div class="language-item">
+            <div class="language-name">English</div>
+            <div class="language-level">Professional Working</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interests Section -->
+      <div class="resume-section">
+        <h2 class="section-title">
+          <i class="fas fa-heart section-icon"></i>
+          Research Interests
+        </h2>
+        
+        <div class="education-description">
+          <strong>AI Exploration:</strong> Strong interest in AI-driven technologies with hands-on experience 
+          experimenting with large language models like ChatGPT, Claude, and Grok.<br><br>
+          
+          <strong>Core Research Areas:</strong> Autonomous systems, intelligent robotics, machine learning 
+          algorithm optimization, computer vision, and sensor data processing.<br><br>
+          
+          <strong>Future Goals:</strong> Contributing to the development of intelligent robotic systems 
+          that can seamlessly integrate into human environments and solve complex global challenges 
+          in healthcare, environmental protection, and space exploration.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Xinle Zhang // AI & Robotics Portfolio // Resume Archive Operational</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Typing effect for page subtitle
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    // Initialize typing effect
+    window.addEventListener('load', function() {
+      const subtitle = document.querySelector('.page-subtitle');
+      if (subtitle) {
+        const originalText = subtitle.textContent;
+        typeWriter(subtitle, originalText, 150);
+      }
+    });
+
+    // Enhanced hover effects
+    document.querySelectorAll('.education-item, .project-item').forEach(item => {
+      item.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateX(5px)';
+      });
+      
+      item.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateX(0)';
+      });
+    });
+
+    // Add loading effect for download buttons
+    document.querySelectorAll('.btn-download').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const icon = this.querySelector('i');
+        if (icon && !this.getAttribute('onclick')) {
+          e.preventDefault();
+          icon.classList.add('fa-spin');
+          setTimeout(() => {
+            icon.classList.remove('fa-spin');
+          }, 2000);
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

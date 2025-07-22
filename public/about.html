@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About :: Xinle Zhang - AI & Robotics Portfolio</title>
+  <meta name="description" content="About Xinle Zhang - Master's student in Autonomous Systems and Intelligent Robotics at KTH Royal Institute of Technology">
+  <meta name="keywords" content="About, Xinle Zhang, AI, Robotics, KTH, Stockholm, EIT Digital">
+  <meta name="author" content="Xinle Zhang">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Electrolize:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00ddff;
+      --secondary-color: #ff0080;
+      --accent-color: #00ff88;
+      --dark-color: #050810;
+      --dark-blue: #0a1628;
+      --text-glow: 0 0 10px rgba(0, 221, 255, 0.5);
+      --grid-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Electrolize', sans-serif;
+      background: linear-gradient(135deg, var(--dark-color) 0%, var(--dark-blue) 100%);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+      padding-top: 100px;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 221, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 221, 255, 0.1) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(var(--grid-size), var(--grid-size)); }
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      color: #fff !important;
+      transition: all 0.3s ease;
+      text-shadow: var(--text-glow);
+    }
+
+    .nav-link:hover, .navbar-brand:hover {
+      color: var(--primary-color) !important;
+      text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .nav-link.active {
+      color: var(--accent-color) !important;
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding: 2rem 0;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* About Sections */
+    .about-section {
+      margin-bottom: 4rem;
+    }
+
+    .section-card {
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-card:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 15px 40px rgba(0, 221, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-icon {
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+
+    .section-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Mission Statement */
+    .mission-statement {
+      background: linear-gradient(135deg, rgba(0, 221, 255, 0.1), rgba(0, 255, 136, 0.1));
+      border: 2px solid var(--accent-color);
+      border-radius: 25px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .mission-quote {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .mission-text {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Education Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(0, 221, 255, 0.05);
+      border-radius: 15px;
+      border-left: 3px solid var(--primary-color);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.3rem;
+      top: 1rem;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      border: 2px solid var(--dark-color);
+    }
+
+    .timeline-date {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-color);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .timeline-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    .timeline-institution {
+      color: var(--accent-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-description {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    /* Interest Grid */
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .interest-item {
+      background: rgba(0, 221, 255, 0.1);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .interest-item:hover {
+      background: rgba(0, 221, 255, 0.15);
+      transform: translateY(-5px);
+      border-color: var(--primary-color);
+    }
+
+    .interest-icon {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .interest-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .interest-description {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    /* CTA Buttons */
+    .cta-section {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 3rem;
+      background: rgba(5, 8, 16, 0.8);
+      border: 1px solid rgba(0, 221, 255, 0.3);
+      border-radius: 25px;
+      backdrop-filter: blur(20px);
+    }
+
+    .btn-cyber {
+      background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(255, 0, 128, 0.2));
+      border: 1px solid var(--primary-color);
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem;
+    }
+
+    .btn-cyber:hover {
+      transform: translateY(-2px) scale(1.02);
+      border: 2px solid var(--accent-color);
+      background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(255, 0, 128, 0.3));
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(0, 221, 255, 0.4);
+    }
+
+    .btn-cyber.secondary {
+      border-color: var(--accent-color);
+      background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(0, 221, 255, 0.2));
+    }
+
+    .btn-cyber.secondary:hover {
+      border-color: var(--primary-color);
+      background: linear-gradient(45deg, rgba(0, 255, 136, 0.3), rgba(0, 221, 255, 0.3));
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(5, 8, 16, 0.9);
+      border-top: 1px solid rgba(0, 221, 255, 0.3);
+      padding: 2rem 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2.5rem;
+      }
+      
+      .section-card {
+        padding: 2rem;
+      }
+      
+      .interest-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .timeline {
+        padding-left: 1.5rem;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-animation">
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">[ AI // Xinle Zhang ]</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(0, 221, 255, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="about.html"><i class="fas fa-user me-2"></i>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html"><i class="fas fa-code me-2"></i>Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="skills.html"><i class="fas fa-cog me-2"></i>Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="resume.html"><i class="fas fa-file-pdf me-2"></i>Resume</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="games.html"><i class="fas fa-gamepad me-2"></i>Games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="philosophy.html"><i class="fas fa-brain me-2"></i>Philosophy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header" data-aos="fade-up">
+      <h1 class="page-title">System Profile</h1>
+      <p class="page-subtitle">// Personal Database</p>
+    </div>
+
+    <!-- Mission Statement -->
+    <div class="mission-statement" data-aos="fade-up">
+      <div class="mission-quote">
+        "Bridging the gap between artificial intelligence and robotics"
+      </div>
+      <div class="mission-text">
+        Passionate about creating intelligent systems that can adapt, learn, and operate autonomously in dynamic environments.
+      </div>
+    </div>
+
+    <!-- About Introduction -->
+    <div class="about-section">
+      <div class="section-card" data-aos="fade-up">
+        <h2 class="section-title">
+          <i class="fas fa-robot section-icon"></i>
+          Mission Statement
+        </h2>
+        <div class="section-content">
+          <p>
+            I am currently pursuing a Master's degree in <strong>Autonomous Systems and Intelligent Robotics</strong> 
+            through the prestigious <strong>EIT Digital Master School</strong> program. My academic journey began at 
+            <strong>KTH Royal Institute of Technology</strong> in Stockholm, where I'm developing comprehensive 
+            expertise in AI algorithms, robotics systems, and intelligent control mechanisms.
+          </p>
+          <p>
+            My passion lies in exploring the intersection of artificial intelligence and robotics, with a particular 
+            focus on creating autonomous systems that can adapt and learn in dynamic environments. I believe that 
+            the future of technology depends on seamless integration between intelligent algorithms and physical systems.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="about-section">
+      <div class="section-card" data-aos="fade-up" data-aos-delay="100">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap section-icon"></i>
+          Educational Journey
+        </h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">August 2024 - Present</div>
+            <div class="timeline-title">Master's in Autonomous Systems & Intelligent Robotics</div>
+            <div class="timeline-institution">EIT Digital Master School</div>
+            <div class="timeline-description">
+              Dual-degree program starting at KTH Royal Institute of Technology, Stockholm, Sweden. 
+              Expected to complete the second year at Aalto University, Finland. Focus on advanced 
+              AI algorithms, robotics systems, sensor data processing, and autonomous system design.
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-date">Fall 2024</div>
+            <div class="timeline-title">Introduction to Robotics (DD2410)</div>
+            <div class="timeline-institution">KTH Royal Institute of Technology</div>
+            <div class="timeline-description">
+              Comprehensive coursework covering robot kinematics, dynamics, path planning, and control systems. 
+              Hands-on experience with ROS, Python programming for robotics, and implementation of particle 
+              filter algorithms for autonomous navigation.
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-date">Fall 2024</div>
+            <div class="timeline-title">Deep Learning in Data Science (DD2424)</div>
+            <div class="timeline-institution">KTH Royal Institute of Technology</div>
+            <div class="timeline-description">
+              Advanced study of deep learning architectures, optimization algorithms, and neural network 
+              implementations. Practical experience with PyTorch, TensorFlow, and real-world data science applications.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Research Interests -->
+    <div class="about-section">
+      <div class="section-card" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="section-title">
+          <i class="fas fa-search section-icon"></i>
+          Research Interests
+        </h2>
+        <div class="interest-grid">
+          <div class="interest-item">
+            <div class="interest-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <div class="interest-title">Machine Learning</div>
+            <div class="interest-description">
+              Deep learning, neural networks, and AI algorithm optimization
+            </div>
+          </div>
+          
+          <div class="interest-item">
+            <div class="interest-icon">
+              <i class="fas fa-cogs"></i>
+            </div>
+            <div class="interest-title">Autonomous Systems</div>
+            <div class="interest-description">
+              Self-driving robots, navigation algorithms, and intelligent control
+            </div>
+          </div>
+          
+          <div class="interest-item">
+            <div class="interest-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="interest-title">Computer Vision</div>
+            <div class="interest-description">
+              Image processing, object detection, and visual perception systems
+            </div>
+          </div>
+          
+          <div class="interest-item">
+            <div class="interest-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <div class="interest-title">Path Planning</div>
+            <div class="interest-description">
+              A* algorithms, motion planning, and obstacle avoidance
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Exploration -->
+    <div class="about-section">
+      <div class="section-card" data-aos="fade-up" data-aos-delay="300">
+        <h2 class="section-title">
+          <i class="fas fa-rocket section-icon"></i>
+          AI Exploration & Innovation
+        </h2>
+        <div class="section-content">
+          <p>
+            I have a strong passion for exploring cutting-edge AI technologies and staying at the forefront 
+            of technological innovation. My hands-on experience includes experimenting with large language models 
+            such as <strong>ChatGPT</strong>, <strong>Claude</strong>, <strong>Grok</strong>, and <strong>DeepSeek</strong> 
+            for various applications including:
+          </p>
+          <ul style="margin-top: 1rem; padding-left: 2rem;">
+            <li><strong>AI-Assisted Programming:</strong> Code generation, debugging, and optimization</li>
+            <li><strong>Algorithm Development:</strong> Designing and implementing complex AI algorithms</li>
+            <li><strong>Research Assistance:</strong> Literature review and technical documentation</li>
+            <li><strong>Problem Solving:</strong> Creative approaches to engineering challenges</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            This experience has given me unique insights into the practical applications of AI tools 
+            in research and development, helping me bridge the gap between theoretical knowledge and 
+            real-world implementation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals & Vision -->
+    <div class="about-section">
+      <div class="section-card" data-aos="fade-up" data-aos-delay="400">
+        <h2 class="section-title">
+          <i class="fas fa-target section-icon"></i>
+          Goals & Vision
+        </h2>
+        <div class="section-content">
+          <p>
+            My ultimate goal is to contribute to the development of intelligent robotic systems that can 
+            seamlessly integrate into human environments. I envision a future where robots and AI systems 
+            work alongside humans to solve complex global challenges in areas such as:
+          </p>
+          <ul style="margin-top: 1rem; padding-left: 2rem;">
+            <li><strong>Healthcare:</strong> Assistive robotics and medical AI systems</li>
+            <li><strong>Environmental Protection:</strong> Autonomous monitoring and conservation systems</li>
+            <li><strong>Space Exploration:</strong> Intelligent rovers and autonomous space missions</li>
+            <li><strong>Manufacturing:</strong> Adaptive production systems and quality control</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            I am particularly interested in pursuing research opportunities that allow me to work on 
+            cutting-edge projects that push the boundaries of what's possible in AI and robotics.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section" data-aos="fade-up" data-aos-delay="500">
+      <h3 style="color: var(--accent-color); font-family: 'Orbitron', sans-serif; margin-bottom: 2rem;">Let's Build the Future Together</h3>
+      <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; font-size: 1.1rem;">
+        I'm always excited to discuss AI, robotics, and innovative technology projects. 
+        Whether you're interested in collaboration, research opportunities, or just want to chat about the latest in tech.
+      </p>
+      <div>
+        <a href="contact.html" class="btn-cyber">
+          <i class="fas fa-envelope"></i> Get In Touch
+        </a>
+        <a href="projects.html" class="btn-cyber secondary">
+          <i class="fas fa-code"></i> View Projects
+        </a>
+                      <a href="https://firebasestorage.googleapis.com/v0/b/jackeysproject.firebasestorage.app/o/xinle.pdf?alt=media&token=af7f0663-bf5e-4393-9599-b70fa0f59e46" target="_blank" class="btn-cyber" download="Xinle_Zhang_Resume.pdf">
+                <i class="fas fa-download"></i> Download Resume
+              </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Xinle Zhang // AI & Robotics Portfolio // System Profile Operational</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Typing effect for page subtitle
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    // Initialize typing effect
+    window.addEventListener('load', function() {
+      const subtitle = document.querySelector('.page-subtitle');
+      if (subtitle) {
+        const originalText = subtitle.textContent;
+        typeWriter(subtitle, originalText, 150);
+      }
+    });
+
+    // Enhanced hover effects
+    document.querySelectorAll('.section-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+    });
+
+    // Add loading effect for buttons
+    document.querySelectorAll('.btn-cyber').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.classList.add('fa-spin');
+          setTimeout(() => {
+            icon.classList.remove('fa-spin');
+          }, 1000);
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

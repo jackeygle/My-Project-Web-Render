@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake AI - A* Pathfinding Algorithm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ddff;
+            --secondary-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --dark-color: #050810;
+            --neural-pulse: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .game-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 221, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        /* 主要内容区域 */
+        .game-container {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            background: rgba(5, 8, 16, 0.8);
+            border: 2px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .game-canvas {
+            width: 100%;
+            max-width: 600px;
+            height: 600px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            display: block;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(255, 0, 128, 0.2));
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(255, 0, 128, 0.3));
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(0, 221, 255, 0.1);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 算法信息 */
+        .algorithm-section {
+            background: rgba(5, 8, 16, 0.8);
+            border: 1px solid rgba(0, 221, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .algorithm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .algorithm-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .source-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.2), rgba(255, 0, 128, 0.2));
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            border: 1px solid var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .source-link:hover {
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid var(--accent-color);
+            background: linear-gradient(45deg, rgba(0, 221, 255, 0.3), rgba(255, 0, 128, 0.3));
+            text-decoration: none;
+            color: white;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .game-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .game-name {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .game-navbar {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="game-navbar">
+        <div class="game-title">🐍 Snake AI</div>
+        <div class="nav-buttons">
+            <a href="games.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Back to Games
+            </a>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <!-- 游戏标题区域 -->
+        <div class="game-header">
+            <span class="game-icon">🐍</span>
+            <h1 class="game-name">Snake AI</h1>
+            <p class="game-description">
+                Experience the power of A* pathfinding algorithm! Watch how the AI snake 
+                calculates optimal paths in real-time, intelligently collecting food while avoiding collisions.
+            </p>
+        </div>
+
+        <!-- 游戏区域 -->
+        <div class="game-area">
+            <canvas id="snake-canvas" class="game-canvas" width="600" height="600"></canvas>
+            
+            <div class="game-controls">
+                <button class="control-btn" onclick="startSnakeGame()">Start AI</button>
+                <button class="control-btn" onclick="pauseSnakeGame()">Pause</button>
+                <button class="control-btn" onclick="resetSnakeGame()">Reset</button>
+                <button class="control-btn" onclick="toggleSnakeSpeed()">Speed+</button>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="snake-score">0</span>
+                    <span class="stat-label">Score</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="snake-speed">5</span>
+                    <span class="stat-label">Speed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="snake-length">1</span>
+                    <span class="stat-label">Length</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 算法信息 -->
+        <div class="algorithm-section">
+            <h2 class="algorithm-title">A* Pathfinding Algorithm</h2>
+            <div class="algorithm-content">
+                <p>The A* (pronounced "A-star") algorithm is one of the most popular pathfinding algorithms used in computer science and game development. It efficiently finds the shortest path between two points by combining the benefits of Dijkstra's algorithm with heuristic search.</p>
+                
+                <br>
+                
+                <p><strong>How it works:</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li>Uses both actual distance (g-cost) and estimated distance to goal (h-cost)</li>
+                    <li>Maintains open and closed lists of nodes to explore</li>
+                    <li>Always explores the most promising node first (lowest f-cost = g-cost + h-cost)</li>
+                    <li>Guarantees optimal path when using admissible heuristic</li>
+                </ul>
+
+                <br>
+
+                <p><strong>In this Snake AI implementation:</strong> The algorithm calculates the optimal path from the snake's head to the food, avoiding the snake's body and walls, updating the path in real-time as the snake moves.</p>
+                
+                <center>
+                    <a href="https://github.com/jackeygle/Algorithm-Visualizer/blob/main/snake-ai-astar.py" 
+                       target="_blank" class="source-link">
+                        <i class="fas fa-code"></i> View Source Code
+                    </a>
+                </center>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Snake AI Game Implementation (将之前的SnakeGame类代码放在这里)
+        class SnakeGame {
+            constructor() {
+                this.canvas = document.getElementById('snake-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.gridSize = 20;
+                this.cols = this.canvas.width / this.gridSize;
+                this.rows = this.canvas.height / this.gridSize;
+                
+                this.snake = [{x: 10, y: 10}];
+                this.food = this.generateFood();
+                this.direction = {x: 1, y: 0};
+                this.score = 0;
+                this.speed = 5;
+                this.gameRunning = false;
+                this.path = [];
+            }
+
+            generateFood() {
+                let food;
+                do {
+                    food = {
+                        x: Math.floor(Math.random() * this.cols),
+                        y: Math.floor(Math.random() * this.rows)
+                    };
+                } while (this.snake.some(segment => segment.x === food.x && segment.y === food.y));
+                return food;
+            }
+
+            findPath(start, goal) {
+                const openSet = [start];
+                const closedSet = [];
+                const gScore = {};
+                const fScore = {};
+                const cameFrom = {};
+
+                gScore[`${start.x},${start.y}`] = 0;
+                fScore[`${start.x},${start.y}`] = this.heuristic(start, goal);
+
+                while (openSet.length > 0) {
+                    let current = openSet.reduce((a, b) => 
+                        fScore[`${a.x},${a.y}`] < fScore[`${b.x},${b.y}`] ? a : b
+                    );
+
+                    if (current.x === goal.x && current.y === goal.y) {
+                        const path = [];
+                        while (current) {
+                            path.unshift(current);
+                            current = cameFrom[`${current.x},${current.y}`];
+                        }
+                        return path;
+                    }
+
+                    openSet.splice(openSet.indexOf(current), 1);
+                    closedSet.push(current);
+
+                    const neighbors = this.getNeighbors(current);
+                    for (const neighbor of neighbors) {
+                        if (closedSet.some(node => node.x === neighbor.x && node.y === neighbor.y)) continue;
+                        if (!this.isValidMove(neighbor.x, neighbor.y)) continue;
+
+                        const tentativeGScore = gScore[`${current.x},${current.y}`] + 1;
+
+                        if (!openSet.some(node => node.x === neighbor.x && node.y === neighbor.y)) {
+                            openSet.push(neighbor);
+                        } else if (tentativeGScore >= gScore[`${neighbor.x},${neighbor.y}`]) {
+                            continue;
+                        }
+
+                        cameFrom[`${neighbor.x},${neighbor.y}`] = current;
+                        gScore[`${neighbor.x},${neighbor.y}`] = tentativeGScore;
+                        fScore[`${neighbor.x},${neighbor.y}`] = gScore[`${neighbor.x},${neighbor.y}`] + this.heuristic(neighbor, goal);
+                    }
+                }
+                return [];
+            }
+
+            heuristic(a, b) {
+                return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+            }
+
+            getNeighbors(node) {
+                return [
+                    {x: node.x + 1, y: node.y},
+                    {x: node.x - 1, y: node.y},
+                    {x: node.x, y: node.y + 1},
+                    {x: node.x, y: node.y - 1}
+                ];
+            }
+
+            isValidMove(x, y) {
+                if (x < 0 || x >= this.cols || y < 0 || y >= this.rows) return false;
+                const snakeBody = this.snake.slice(0, -1);
+                return !snakeBody.some(segment => segment.x === x && segment.y === y);
+            }
+
+            update() {
+                if (!this.gameRunning) return;
+
+                const head = this.snake[0];
+                this.path = this.findPath(head, this.food);
+                
+                if (this.path.length > 1) {
+                    const nextMove = this.path[1];
+                    this.direction = {
+                        x: nextMove.x - head.x,
+                        y: nextMove.y - head.y
+                    };
+                }
+
+                const newHead = {
+                    x: head.x + this.direction.x,
+                    y: head.y + this.direction.y
+                };
+
+                if (!this.isValidMove(newHead.x, newHead.y) && 
+                    !(newHead.x === this.food.x && newHead.y === this.food.y)) {
+                    this.gameRunning = false;
+                    return;
+                }
+
+                this.snake.unshift(newHead);
+
+                if (newHead.x === this.food.x && newHead.y === this.food.y) {
+                    this.score += 10;
+                    this.food = this.generateFood();
+                    document.getElementById('snake-score').textContent = this.score;
+                    document.getElementById('snake-length').textContent = this.snake.length;
+                } else {
+                    this.snake.pop();
+                }
+            }
+
+            draw() {
+                this.ctx.fillStyle = '#000011';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw path
+                if (this.path.length > 0) {
+                    this.ctx.strokeStyle = 'rgba(0, 255, 136, 0.3)';
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    for (let i = 0; i < this.path.length - 1; i++) {
+                        const current = this.path[i];
+                        const next = this.path[i + 1];
+                        this.ctx.moveTo(current.x * this.gridSize + this.gridSize/2, current.y * this.gridSize + this.gridSize/2);
+                        this.ctx.lineTo(next.x * this.gridSize + this.gridSize/2, next.y * this.gridSize + this.gridSize/2);
+                    }
+                    this.ctx.stroke();
+                }
+
+                // Draw snake
+                this.snake.forEach((segment, index) => {
+                    if (index === 0) {
+                        this.ctx.fillStyle = '#00ff88';
+                        this.ctx.shadowColor = '#00ff88';
+                        this.ctx.shadowBlur = 10;
+                    } else {
+                        this.ctx.fillStyle = '#00ddff';
+                        this.ctx.shadowBlur = 0;
+                    }
+                    this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+                });
+
+                // Draw food
+                this.ctx.fillStyle = '#ff6b6b';
+                this.ctx.shadowColor = '#ff6b6b';
+                this.ctx.shadowBlur = 15;
+                this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+                this.ctx.shadowBlur = 0;
+            }
+
+            start() {
+                this.gameRunning = true;
+            }
+
+            pause() {
+                this.gameRunning = false;
+            }
+
+            reset() {
+                this.snake = [{x: 10, y: 10}];
+                this.food = this.generateFood();
+                this.direction = {x: 1, y: 0};
+                this.score = 0;
+                this.gameRunning = false;
+                this.path = [];
+                document.getElementById('snake-score').textContent = this.score;
+                document.getElementById('snake-length').textContent = this.snake.length;
+            }
+
+            toggleSpeed() {
+                this.speed = this.speed === 5 ? 10 : this.speed === 10 ? 15 : 5;
+                document.getElementById('snake-speed').textContent = this.speed;
+            }
+        }
+
+        const snakeGame = new SnakeGame();
+
+        function startSnakeGame() {
+            snakeGame.start();
+        }
+
+        function pauseSnakeGame() {
+            snakeGame.pause();
+        }
+
+        function resetSnakeGame() {
+            snakeGame.reset();
+        }
+
+        function toggleSnakeSpeed() {
+            snakeGame.toggleSpeed();
+        }
+
+        function gameLoop() {
+            snakeGame.update();
+            snakeGame.draw();
+            setTimeout(gameLoop, 1000 / snakeGame.speed);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html> 
