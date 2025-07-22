@@ -854,7 +854,7 @@
       btn.addEventListener('click', function(e) {
         const icon = this.querySelector('i');
         if (icon && !this.getAttribute('onclick')) {
-          e.preventDefault();
+          // Removed preventDefault to allow link navigation
           icon.classList.add('fa-spin');
           setTimeout(() => {
             icon.classList.remove('fa-spin');
