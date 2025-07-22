@@ -1,365 +1,241 @@
-# 🎮 Algorithm Visualizer - Interactive Game Algorithms
+# 🌌 AI & Robotics Portfolio - Xinle Zhang
 
-[![GitHub stars](https://img.shields.io/github/stars/jackeygle/Algorithm-Visualizer?style=social)](https://github.com/jackeygle/Algorithm-Visualizer/stargazers)
+[![Live Website](https://img.shields.io/badge/website-live-brightgreen.svg)](https://jackeysproject.web.app)
+[![GitHub](https://img.shields.io/badge/github-repository-blue.svg)](https://github.com/jackeygle/My-Project-Web)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://jackeysproject.web.app/games.html)
 
-An educational repository containing clean implementations of classic algorithms demonstrated through interactive games and visualizations. Learn algorithms by **playing games first**, then **diving into the code**!
+A stunning AI-themed portfolio website showcasing expertise in **Artificial Intelligence**, **Robotics**, and **Machine Learning**. Features an immersive neural network background with dynamic AI processing nodes and interactive visualizations.
 
-## 🚀 Live Interactive Demo
+## 🚀 Live Demo
 
-**🎮 Play the games**: [https://jackeysproject.web.app/games.html](https://jackeysproject.web.app/games.html)
+**🌐 Visit the Portfolio**: [https://jackeysproject.web.app](https://jackeysproject.web.app)
 
-Each game has a **"View Source Code"** button that links directly to the algorithm implementation in this repository!
+## ✨ Features
 
----
+### 🧠 Neural Network Universe Background
+- **Real-time Canvas Animation**: Dynamic neural network with moving nodes and connections
+- **Multimodal AI Nodes**: Interactive processing units for Vision, Language, Audio, Robotics, and Neural Networks
+- **Energy Flow Visualization**: Animated data transmission between AI components
+- **Floating Code Fragments**: Live-updating AI/ML code snippets with syntax highlighting
+- **Mouse Interaction**: Parallax effects and responsive animations
 
-## 📚 Featured Algorithms
+### 🎨 Unified Cyberpunk Design
+- **Dark Theme**: Professional deep-space color scheme with blue-purple accents
+- **Gradient Effects**: Stunning text gradients and glowing elements
+- **Interactive Elements**: Hover animations, ripple effects, and smooth transitions
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 
-### 🐍 1. Snake AI - A* Pathfinding Algorithm
-**File**: [`snake-ai-astar.py`](snake-ai-astar.py) | **Lines**: 245 | **Demo**: [Snake AI Game](https://jackeysproject.web.app/games.html)
+### 📱 Complete Portfolio Pages
 
-**Algorithm Overview:**
-A* (A-star) is an informed search algorithm that finds the shortest path between nodes using heuristics to guide the search.
+#### 🏠 **Home** (`index.html`)
+- Hero section with AI universe background
+- Dynamic typing animation
+- Quick navigation to all sections
 
-**Key Features:**
-- **Heuristic Function**: Manhattan distance for grid-based movement
-- **Pathfinding Strategy**: Combines actual cost (g-cost) with estimated cost (h-cost)
-- **Optimality**: Guaranteed optimal path with admissible heuristic
-- **Real-time Decision Making**: Snake navigates efficiently to food while avoiding collisions
+#### 👤 **About** (`about.html`)
+- Personal mission and educational journey
+- Timeline of academic achievements
+- Research interests grid
+- Resume download functionality
 
-**Complexity Analysis:**
-- **Time Complexity**: `O(b^d)` where b = branching factor, d = depth
-- **Space Complexity**: `O(b^d)` for storing open and closed sets
-- **Practical Performance**: Excellent for real-time pathfinding in games
+#### 💼 **Projects** (`projects.html`)
+- Showcase of AI and robotics projects
+- Interactive project cards with live links
+- Technology stack tags
+- GitHub repository connections
 
-**Implementation Highlights:**
-```python
-def find_path(self, start, goal):
-    # Priority queue with f-cost = g-cost + h-cost
-    open_set = []
-    heapq.heappush(open_set, Node(start[0], start[1], 0, self.heuristic(start, goal)))
-    # ... A* algorithm implementation
-```
+#### ⚡ **Skills** (`skills.html`)
+- Categorized technical skills
+- Animated progress bars
+- Technology proficiency indicators
+- AI/ML specializations
 
----
+#### 📄 **Resume** (`resume.html`)
+- Professional resume in web format
+- PDF download functionality
+- Contact information
+- Technical expertise summary
 
-### 🧩 2. Sudoku Solver - Backtracking Algorithm
-**File**: [`sudoku-backtracking.py`](sudoku-backtracking.py) | **Lines**: 327 | **Demo**: [Sudoku Solver](https://jackeysproject.web.app/games.html)
+#### 📞 **Contact** (`contact.html`)
+- Multiple contact methods
+- Social media links
+- Professional networking information
 
-**Algorithm Overview:**
-Backtracking is a systematic method for solving constraint satisfaction problems. It incrementally builds candidates and abandons them when they cannot lead to a valid solution.
+#### 🧠 **Philosophy** (`philosophy.html`)
+- Digital philosophy and AI thoughts
+- Personal reflections on technology
+- Vision for the future of AI
+- Learning principles and methodologies
 
-**Key Features:**
-- **Constraint Propagation**: Validates moves against Sudoku rules (row, column, 3x3 box)
-- **Most Constraining Variable (MCV)**: Chooses cells with fewest possibilities first
-- **Systematic Exploration**: Depth-first search with intelligent pruning
-- **Visual Demonstration**: Watch the algorithm solve puzzles step-by-step
+#### 🎮 **Games** (`games.html`)
+- Interactive AI algorithm demonstrations
+- Educational game implementations
+- Algorithm visualizations
 
-**Complexity Analysis:**
-- **Time Complexity**: `O(9^(n×n))` worst case, much better with pruning
-- **Space Complexity**: `O(n×n)` for recursion stack
-- **Average Performance**: Significantly optimized with heuristics
+## 🛠️ Technology Stack
 
-**Implementation Highlights:**
-```python
-def solve(self):
-    # Find empty cell with most constraints (MCV heuristic)
-    empty_cell = self.find_empty_cell()
-    for num in range(1, 10):
-        if self.is_valid_move(row, col, num):
-            self.grid[row][col] = num  # Make choice
-            if self.solve():           # Recursive call
-                return True
-            self.grid[row][col] = 0    # Backtrack
-```
+### Frontend Technologies
+- **HTML5**: Semantic markup and structure
+- **CSS3**: Advanced styling with flexbox, grid, and animations
+- **JavaScript (ES6+)**: Interactive functionality and animations
+- **Canvas API**: Real-time neural network visualization
 
----
+### Frameworks & Libraries
+- **Bootstrap 5.3.0**: Responsive layout framework
+- **Font Awesome 6.4.0**: Icon library
+- **AOS (Animate On Scroll)**: Scroll-triggered animations
+- **Google Fonts**: Typography (Orbitron, JetBrains Mono, Electrolize)
 
-### 🎯 3. 2048 AI - Minimax Algorithm with Alpha-Beta Pruning
-**File**: [`minimax-2048.py`](minimax-2048.py) | **Lines**: 459 | **Demo**: [2048 AI Game](https://jackeysproject.web.app/games.html)
+### Development Tools
+- **Git**: Version control
+- **Firebase**: Hosting and file storage
+- **GitHub**: Code repository and collaboration
 
-**Algorithm Overview:**
-Minimax is a decision-making algorithm for turn-based games. It assumes both players play optimally and chooses the move that maximizes the minimum guaranteed outcome.
+## 🎯 Key Sections
 
-**Key Features:**
-- **Game Tree Exploration**: Alternating max (player) and min (random tiles) layers
-- **Alpha-Beta Pruning**: Optimizes search by eliminating unnecessary branches
-- **Multi-dimensional Evaluation**: Combines empty cells, monotonicity, smoothness, corner bonus
-- **Expectimax Variant**: Handles stochastic elements (random tile placement)
+### 🤖 AI & Robotics Projects
+1. **Autonomous Robot Manipulation** - ROS-based robotic control
+2. **Deep Learning in Data Science** - Neural network implementations
+3. **AI Game Algorithms** - Minimax and pathfinding algorithms
+4. **Pathfinding Visualizer** - Interactive algorithm demonstrations
+5. **Machine Learning Fundamentals** - Core ML concept implementations
 
-**Complexity Analysis:**
-- **Time Complexity**: `O(b^d)` where b = branching factor, d = search depth
-- **Space Complexity**: `O(d)` for recursion stack
-- **Optimization**: Alpha-beta pruning reduces average case significantly
+### 🔬 Technical Skills
+- **AI & Machine Learning**: Python, TensorFlow, Neural Networks
+- **Robotics**: ROS, Control Systems, SLAM
+- **Programming**: JavaScript, Python, HTML/CSS
+- **AI-Assisted Development**: ChatGPT, Claude, DeepSeek
+- **Languages**: English (Fluent), Chinese (Native), Swedish (Basic)
 
-**Evaluation Function:**
-```python
-def evaluate_board(self, game):
-    # Multi-factor heuristic evaluation
-    score = (empty_cells * 2.7 +           # More empty cells = better
-             monotonicity * 1.0 +          # Ordered arrangement
-             smoothness * 0.1 +            # Similar adjacent values
-             corner_bonus * 0.5 +          # Max tile in corner
-             current_score * 1.0)          # Game score
-    return score
-```
+## 🚀 Getting Started
 
----
+### Prerequisites
+- Web browser (Chrome, Firefox, Safari, Edge)
+- Git (for cloning the repository)
 
-### 🔄 4. Conway's Game of Life - Cellular Automata
-**File**: [`conway-life.py`](conway-life.py) | **Lines**: 406 | **Demo**: [Conway's Life](https://jackeysproject.web.app/games.html)
-
-**Algorithm Overview:**
-Conway's Game of Life is a cellular automaton that demonstrates how complex patterns can emerge from simple rules. Each cell follows basic rules based on its neighbors.
-
-**Key Features:**
-- **Simple Rules**: 3 basic rules create complex emergent behavior
-- **Pattern Library**: Includes gliders, oscillators, still lifes, and more
-- **Emergence Demonstration**: Shows how complexity arises from simplicity
-- **Turing Completeness**: Can theoretically simulate any computation
-
-**The Rules:**
-1. **Survival**: Live cell with 2-3 neighbors survives
-2. **Birth**: Dead cell with exactly 3 neighbors becomes alive  
-3. **Death**: All other cells die or stay dead
-
-**Complexity Analysis:**
-- **Time Complexity**: `O(n×m)` per generation
-- **Space Complexity**: `O(n×m)` for grid storage
-- **Pattern Analysis**: Includes stability detection and population tracking
-
-**Implementation Highlights:**
-```python
-def next_generation(self):
-    new_grid = [[False] * self.width for _ in range(self.height)]
-    for y in range(self.height):
-        for x in range(self.width):
-            neighbors = self.count_neighbors(x, y)
-            new_grid[y][x] = self.apply_rules(x, y, neighbors)
-    self.grid = new_grid  # Update all cells simultaneously
-```
-
----
-
-### 🗺️ 5. Pathfinding Visualizer - Graph Search Comparison
-**File**: [`pathfinding-algorithms.py`](pathfinding-algorithms.py) | **Lines**: 523 | **Demo**: [Pathfinding Comparison](https://jackeysproject.web.app/games.html)
-
-**Algorithm Overview:**
-Comprehensive comparison of pathfinding algorithms showing different approaches to finding paths in graphs. Each algorithm has unique characteristics and use cases.
-
-**Algorithms Implemented:**
-
-#### **A* (A-Star)**
-- **Strategy**: Heuristic-guided optimal search
-- **Guarantee**: Optimal path with admissible heuristic
-- **Use Case**: Games, robotics, GPS navigation
-- **Time**: `O(b^d)` average case
-
-#### **Dijkstra's Algorithm**  
-- **Strategy**: Uniform-cost search, explores all directions equally
-- **Guarantee**: Always finds shortest path
-- **Use Case**: Network routing, social networks
-- **Time**: `O((V + E) log V)` with priority queue
-
-#### **Breadth-First Search (BFS)**
-- **Strategy**: Layer-by-layer exploration
-- **Guarantee**: Shortest path for unweighted graphs
-- **Use Case**: Shortest path in unweighted scenarios
-- **Time**: `O(V + E)` for graph traversal
-
-#### **Depth-First Search (DFS)**
-- **Strategy**: Deep exploration before backtracking
-- **Guarantee**: No optimality guarantee (comparison purposes)
-- **Use Case**: Maze generation, topological sorting
-- **Time**: `O(V + E)` for traversal
-
-**Implementation Features:**
-```python
-class PathfindingAlgorithms:
-    def a_star(self, heuristic_type="euclidean"):
-        # A* with configurable heuristics
-    
-    def dijkstra(self):
-        # Guaranteed shortest path
-    
-    def bfs(self):
-        # Unweighted shortest path
-    
-    def dfs(self):
-        # Deep exploration (non-optimal)
-```
-
----
-
-## 🛠️ Installation & Usage
-
-### **Quick Start**
+### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/jackeygle/Algorithm-Visualizer.git
-cd Algorithm-Visualizer
+git clone https://github.com/jackeygle/My-Project-Web.git
 
-# Run any algorithm demonstration
-python snake-ai-astar.py
-python sudoku-backtracking.py
-python minimax-2048.py
-python conway-life.py
-python pathfinding-algorithms.py
+# Navigate to the project directory
+cd My-Project-Web
+
+# Open the website locally
+open public/index.html
+# or serve with a local server
+python -m http.server 8000 -d public
 ```
 
-### **Requirements**
+### Firebase Deployment
 
-```python
-# Core requirements (Python 3.8+)
-import heapq          # Priority queues for A* and Dijkstra
-import random         # Random generation for games and mazes
-import time           # Performance timing
-import math           # Mathematical calculations
-from typing import *  # Type hints for better code clarity
-from collections import deque  # BFS queue implementation
-from enum import Enum # Enumerated types for clear state management
+```bash
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Deploy to Firebase Hosting
+firebase deploy
 ```
 
-**No external dependencies required!** All implementations use only Python standard library.
+## 🌟 Highlights
 
----
+### 🎨 Visual Excellence
+- **Immersive Background**: Multi-layer neural network animation system
+- **Smooth Animations**: 60 FPS performance with hardware acceleration
+- **Interactive Elements**: Mouse-responsive effects and hover animations
+- **Professional Design**: Consistent color scheme and typography
 
-## 🎓 Educational Value
+### 📱 User Experience
+- **Fast Loading**: Optimized assets and efficient code
+- **Accessibility**: Semantic HTML and keyboard navigation
+- **Mobile Friendly**: Responsive design for all screen sizes
+- **Cross-Browser**: Compatible with all modern browsers
 
-### **Learning Path**
+### 🔧 Technical Implementation
+- **Clean Code**: Well-documented and maintainable
+- **Performance Optimized**: Hardware acceleration and efficient algorithms
+- **Modular Architecture**: Reusable components and consistent styling
+- **SEO Friendly**: Proper meta tags and semantic structure
+
+## 📊 Project Structure
+
 ```
-🎮 Play Games → 👀 Observe Algorithms → 📖 Study Source Code → 💻 Run Examples → 🧠 Understand Concepts
+My-Project-Web/
+├── public/
+│   ├── index.html              # Home page with neural network background
+│   ├── about.html              # About section with timeline
+│   ├── projects.html           # Project showcase
+│   ├── skills.html             # Skills and expertise
+│   ├── resume.html             # Professional resume
+│   ├── contact.html            # Contact information
+│   ├── philosophy.html         # Digital philosophy thoughts
+│   ├── games.html              # AI algorithm demonstrations
+│   ├── 2048-ai-game.html      # 2048 AI implementation
+│   ├── snake-game.html         # Snake AI with A* pathfinding
+│   ├── tetris-game.html        # Tetris game implementation
+│   ├── sudoku-game.html        # Sudoku solver
+│   ├── conway-game.html        # Conway's Game of Life
+│   ├── pathfinding-visualizer-game.html  # Algorithm visualizer
+│   └── static/
+│       └── images/             # Project images and assets
+├── firebase.json               # Firebase hosting configuration
+├── storage.rules              # Firebase storage rules
+└── README.md                  # Project documentation
 ```
 
-### **What You'll Learn**
+## 🎓 Educational Background
 
-#### **Algorithm Design Patterns**
-- **Search Algorithms**: A*, Dijkstra, BFS, DFS
-- **Optimization**: Alpha-beta pruning, heuristic design
-- **Constraint Satisfaction**: Backtracking with pruning
-- **Simulation**: Cellular automata and emergent behavior
+**Master's Degree in Autonomous Systems and Intelligent Robotics**
+- **Institution**: EIT Digital Master School (KTH Royal Institute of Technology)
+- **Location**: Stockholm, Sweden
+- **Duration**: August 2024 - Present
+- **Focus**: AI algorithms, sensor data processing, system design
 
-#### **Programming Concepts**
-- **Data Structures**: Priority queues, graphs, grids
-- **Algorithm Analysis**: Time/space complexity
-- **Design Patterns**: State management, recursive algorithms
-- **Code Quality**: Documentation, type hints, clean architecture
+## 🏆 Notable Features
 
-#### **Problem-Solving Skills**
-- **Heuristic Design**: Creating effective evaluation functions
-- **State Space Search**: Navigating large solution spaces efficiently
-- **Game Theory**: Minimax decision making
-- **Emergent Systems**: Understanding complex behavior from simple rules
+### 🔬 Neural Network Animation
+- Real-time particle system with 50+ animated nodes
+- Dynamic connection rendering with distance-based activation
+- Multi-layer visual effects with depth and parallax
+- Responsive to user interaction and screen size
 
----
+### 🎮 Interactive Demonstrations
+- Live algorithm visualizations
+- Educational game implementations
+- Real-time code execution examples
+- Interactive learning experiences
 
-## 🌟 Features
+### 📱 Mobile-First Design
+- Touch-friendly interface
+- Responsive animations
+- Optimized performance on mobile devices
+- Consistent experience across platforms
 
-### **🎯 Interactive Learning**
-- **Visual Demonstrations**: See algorithms in action
-- **Step-by-step Execution**: Understand each algorithm phase
-- **Performance Metrics**: Compare algorithm efficiency
-- **Real-world Applications**: Games make concepts tangible
+## 📞 Contact Information
 
-### **📖 Educational Quality**
-- **Comprehensive Documentation**: Every function explained
-- **Complexity Analysis**: Big-O notation for all algorithms
-- **Best Practices**: Production-quality code examples
-- **Type Hints**: Modern Python with full type annotations
-
-### **🔧 Practical Implementation**
-- **Modular Design**: Reusable algorithm components
-- **Clean Architecture**: Easy to understand and modify
-- **Performance Optimized**: Efficient implementations
-- **Extensible**: Easy to add new algorithms and features
-
----
-
-## 🎪 Live Demo Experience
-
-### **🎮 Interactive Games**
-Visit [**Algorithm Playground**](https://jackeysproject.web.app/games.html) to experience:
-
-1. **🐍 Snake AI**: Watch A* pathfinding in real-time
-2. **🧩 Sudoku Solver**: See backtracking solve puzzles step-by-step  
-3. **🎯 2048 AI**: Observe minimax making strategic decisions
-4. **🔄 Conway's Life**: Witness emergent patterns evolve
-5. **🗺️ Pathfinding**: Compare algorithm search strategies
-6. **🟦 Tetris**: Experience game state management
-
-### **📱 Features**
-- **Responsive Design**: Works on desktop and mobile
-- **Real-time Visualization**: See algorithms working live
-- **Interactive Controls**: Play/pause, speed control, step-through
-- **Source Code Links**: Direct access to implementations
-- **Educational Explanations**: Algorithm descriptions and complexity analysis
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Here are ways you can help:
-
-### **🔬 Algorithm Implementations**
-- Add new algorithms (sorting, graph algorithms, ML algorithms)
-- Optimize existing implementations
-- Add new visualization features
-
-### **📚 Educational Content**
-- Improve documentation and explanations
-- Add more example use cases
-- Create tutorial content
-
-### **🎮 Interactive Features**
-- Enhance game visualizations
-- Add new interactive demonstrations
-- Improve user experience
-
-### **🐛 Bug Fixes & Improvements**
-- Report issues and bugs
-- Suggest performance improvements
-- Code quality enhancements
-
----
+- **Email**: jackeygle@gmail.com
+- **Phone**: (+46) 793395619
+- **Location**: Stockholm, Sweden
+- **GitHub**: [@jackeygle](https://github.com/jackeygle)
+- **Portfolio**: [jackeysproject.web.app](https://jackeysproject.web.app)
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
 ## 🙏 Acknowledgments
 
-- **John Conway** - For Conway's Game of Life
-- **Peter Hart, Nils Nilsson, Bertram Raphael** - For A* algorithm
-- **Edsger Dijkstra** - For Dijkstra's algorithm
-- **John von Neumann** - For minimax theorem
-- **Algorithm visualization community** - For inspiration
+- **KTH Royal Institute of Technology** - Education and research foundation
+- **EIT Digital** - Master's program support
+- **Open Source Community** - Libraries and frameworks used
+- **AI Research Community** - Inspiration for neural network visualizations
 
 ---
 
-## 📞 Contact
+⭐ **If you like this portfolio, please give it a star!**
 
-- **Website**: [https://jackeysproject.web.app](https://jackeysproject.web.app)
-- **GitHub**: [@jackeygle](https://github.com/jackeygle)
-- **Live Demo**: [Algorithm Playground](https://jackeysproject.web.app/games.html)
-
----
-
-## 🎯 Project Stats
-
-- **📊 Total Lines of Code**: 1,960+
-- **🔧 Algorithms Implemented**: 8+
-- **🎮 Interactive Games**: 6
-- **📚 Educational Documentation**: Comprehensive
-- **🧪 Test Coverage**: Demonstration examples included
-- **⚡ Performance**: Optimized implementations
-
-**⭐ If this project helped you learn algorithms, please give it a star!**
-
----
-
-*"The best way to learn algorithms is to see them in action, understand their purpose, then dive into the implementation. This project bridges the gap between theory and practice through interactive gaming experiences."* 
+*"Bridging the gap between artificial intelligence theory and practical implementation through immersive web experiences."* 
