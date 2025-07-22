@@ -7,7 +7,10 @@ service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
       allow read: if request.resource.contentType == 'application/pdf' 
-                  || request.resource.contentType == 'application/octet-stream';
+                  || request.resource.contentType == 'application/octet-stream'
+                  || request.resource.contentType == 'video/mp4'
+                  || request.resource.contentType.matches('video/.*')
+                  || request.resource.contentType.matches('application/.*');
       allow write: if false;
     }
   }
