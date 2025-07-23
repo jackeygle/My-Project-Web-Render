@@ -677,7 +677,7 @@
         const data = await response.json();
         
         // Update status bar
-        document.getElementById('lastUpdated').textContent = new Date(data.lastUpdated).toLocaleString('zh-CN');
+        document.getElementById('lastUpdated').textContent = new Date(data.lastUpdated).toLocaleString('en-US');
         document.getElementById('sourceCount').textContent = data.sourceCount || 0;
         document.getElementById('topicDate').textContent = data.dateFormatted;
         

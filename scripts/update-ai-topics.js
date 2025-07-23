@@ -2,12 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { OpenAI } = require('openai');
 
-// 初始化 OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Gemini API 配置
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // AI 新闻源配置
 const NEWS_SOURCES = [
@@ -34,7 +32,7 @@ function getCurrentDate() {
   return {
     date: now.toISOString().split('T')[0],
     timestamp: now.toISOString(),
-    formatted: now.toLocaleDateString('zh-CN', {
+    formatted: now.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -80,73 +78,81 @@ async function scrapeAINews() {
   return allTitles;
 }
 
-// 使用 OpenAI 生成 AI 话题摘要
+// 使用 Gemini API 生成 AI 话题摘要
 async function generateAITopicsSummary(newsHeadlines) {
   try {
     const prompt = `
-基于以下AI和机器人相关的新闻标题，请生成一个简洁而有见地的每日AI话题摘要。
+Based on the following AI and robotics news headlines, generate a concise and insightful daily AI topics summary.
 
-新闻标题：
+News Headlines:
 ${newsHeadlines.slice(0, 15).join('\n')}
 
-请用中文回复，包含以下结构的JSON格式：
+Please respond in English with the following JSON structure:
 {
-  "mainTopic": "今日主要AI话题（1-2句话概括）",
+  "mainTopic": "Today's main AI topic (1-2 sentences summary)",
   "keyInsights": [
-    "关键洞察1（1句话）",
-    "关键洞察2（1句话）",
-    "关键洞察3（1句话）"
+    "Key insight 1 (one sentence)",
+    "Key insight 2 (one sentence)", 
+    "Key insight 3 (one sentence)"
   ],
-  "trendAnalysis": "趋势分析（2-3句话，分析当前AI发展方向）",
-  "futureImplications": "未来影响（1-2句话，这些发展对AI和机器人领域的潜在影响）"
+  "trendAnalysis": "Trend analysis (2-3 sentences analyzing current AI development direction)",
+  "futureImplications": "Future implications (1-2 sentences about potential impact on AI and robotics field)"
 }
 
-要求：
-- 内容要有技术深度但易于理解
-- 突出最重要和最有趣的发展
-- 保持专业的技术视角
-- 如果新闻标题不足，可以基于当前AI发展趋势生成相关内容
+Requirements:
+- Content should be technically deep but understandable
+- Highlight the most important and interesting developments
+- Maintain professional technical perspective
+- If news headlines are insufficient, generate relevant content based on current AI development trends
 `;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
+    const requestBody = {
+      contents: [
         {
-          role: "system",
-          content: "你是一位AI和机器人领域的专家分析师，擅长从技术新闻中提取关键信息并进行深度分析。"
-        },
-        {
-          role: "user",
-          content: prompt
+          parts: [
+            {
+              text: `You are an AI and robotics domain expert analyst, skilled at extracting key information from technical news and conducting in-depth analysis.\n\n${prompt}`
+            }
+          ]
         }
       ],
-      temperature: 0.7,
-      max_tokens: 1000
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 1000,
+      }
+    };
+
+    const response = await axios.post(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
-    const responseText = completion.choices[0].message.content;
+    const responseText = response.data.candidates[0].content.parts[0].text;
     
     // 尝试解析JSON
     try {
-      return JSON.parse(responseText.replace(/```json\n?|\n?```/g, ''));
+      const cleanedText = responseText.replace(/```json\n?|\n?```/g, '').trim();
+      return JSON.parse(cleanedText);
     } catch (parseError) {
-      console.error('Failed to parse OpenAI response as JSON:', parseError);
+      console.error('Failed to parse Gemini response as JSON:', parseError);
+      console.log('Raw response:', responseText);
       
       // 如果解析失败，返回默认结构
       return {
-        mainTopic: "今日AI技术继续快速发展，多个领域出现突破性进展。",
+        mainTopic: "Today's AI technology continues rapid development with breakthrough progress across multiple domains.",
         keyInsights: [
-          "机器学习模型性能持续提升",
-          "AI应用场景不断扩展",
-          "技术商业化步伐加快"
+          "Machine learning model performance continues to improve",
+          "AI application scenarios are constantly expanding",
+          "Technology commercialization pace is accelerating"
         ],
-        trendAnalysis: "当前AI发展呈现多元化趋势，从基础研究到实际应用都在快速推进。大模型技术的成熟为各行业带来新的可能性。",
-        futureImplications: "这些发展将加速AI技术的普及，为自动化和智能化带来更多机遇。"
+        trendAnalysis: "Current AI development shows diversified trends, with rapid progress from basic research to practical applications. The maturity of large model technology brings new possibilities for various industries.",
+        futureImplications: "These developments will accelerate AI technology adoption and bring more opportunities for automation and intelligence."
       };
     }
     
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
+    console.error('Error calling Gemini API:', error);
     throw error;
   }
 }
@@ -177,7 +183,7 @@ async function main() {
     console.log(`Found ${newsHeadlines.length} news headlines`);
     
     // 生成摘要
-    console.log('🧠 Generating AI summary with OpenAI...');
+    console.log('🧠 Generating AI summary with Gemini...');
     const aiSummary = await generateAITopicsSummary(newsHeadlines);
     
     // 生成技术统计
