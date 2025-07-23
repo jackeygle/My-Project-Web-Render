@@ -441,17 +441,17 @@
                     <span id="speed-value">50ms</span>
                 </div>
 
-                <div class="sudoku-grid" id="sudoku-grid"></div>
+            <div class="sudoku-grid" id="sudoku-grid"></div>
 
-                <div class="game-controls">
+            <div class="game-controls">
                     <button class="control-btn" onclick="sudokuSolver.generatePuzzle()" id="generate-btn">New Puzzle</button>
                     <button class="control-btn" onclick="sudokuSolver.solve(true)" id="solve-btn">Solve</button>
                     <button class="control-btn" onclick="sudokuSolver.pause()" id="pause-btn" disabled>Pause</button>
                     <button class="control-btn" onclick="sudokuSolver.reset()" id="reset-btn">Reset</button>
                     <button class="control-btn" onclick="sudokuSolver.clearBoard()">Clear All</button>
-                </div>
+            </div>
 
-                <div class="game-stats">
+            <div class="game-stats">
                     <div class="stat-item">
                         <span class="stat-value" id="sudoku-filled">0/81</span>
                         <span class="stat-label">Filled</span>
@@ -477,9 +477,9 @@
         </div>
 
         <div class="algorithm-section">
-            <h2 class="algorithm-title">Backtracking Algorithm</h2>
+             <h2 class="algorithm-title">Backtracking Algorithm</h2>
             <div class="algorithm-content">
-                <p>Backtracking is a powerful algorithmic technique for solving problems recursively by trying to build a solution incrementally. It removes solutions that fail to satisfy the constraints of the problem at any point in time.</p>
+             <p>Backtracking is a powerful algorithmic technique for solving problems recursively by trying to build a solution incrementally. It removes solutions that fail to satisfy the constraints of the problem at any point in time.</p>
                 
                 <br>
                 
@@ -740,7 +740,7 @@
             }
             
             const [row, col] = find;
-            
+
             for (let num = 1; num <= 9; num++) {
                 if (!this.isRunning) return false;
                 
@@ -869,7 +869,7 @@
             this.startTime = 0;
             this.endTime = 0;
         }
-
+        
         updateDisplay(finished = false) {
             const filledCount = this.grid.flat().filter(cell => cell !== 0).length;
             document.getElementById('sudoku-filled').textContent = `${filledCount}/81`;

@@ -119,13 +119,7 @@
       margin-bottom: 2rem;
     }
 
-    /* Contact Grid */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
+
 
     .contact-section {
       background: rgba(5, 8, 16, 0.8);
@@ -288,81 +282,7 @@
       z-index: 1;
     }
 
-    /* Contact Form */
-    .contact-form {
-      background: rgba(5, 8, 16, 0.8);
-      border: 1px solid rgba(0, 221, 255, 0.3);
-      border-radius: 20px;
-      padding: 2.5rem;
-      backdrop-filter: blur(20px);
-    }
 
-    .form-group {
-      margin-bottom: 2rem;
-    }
-
-    .form-label {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--primary-color);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      display: block;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-    }
-
-    .form-control {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(0, 221, 255, 0.4);
-      border-radius: 10px;
-      color: #fff;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-      background: rgba(0, 221, 255, 0.05);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 20px rgba(0, 221, 255, 0.3);
-      color: #fff;
-    }
-
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-      font-family: 'Electrolize', sans-serif;
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .btn-submit {
-      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-      border: none;
-      color: var(--dark-color);
-      padding: 1rem 2rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      width: 100%;
-      font-size: 1.1rem;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.4);
-    }
-
-    .btn-submit:active {
-      transform: translateY(0);
-    }
 
     /* Availability Status */
     .availability-status {
@@ -422,11 +342,6 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
       .page-title {
         font-size: 2.5rem;
       }
@@ -526,16 +441,14 @@
       </div>
     </div>
 
-    <!-- Contact Grid -->
-    <div class="contact-grid">
+    <!-- Contact Information -->
+    <div class="contact-section" data-aos="fade-up" style="max-width: 800px; margin: 0 auto;">
+      <h2 class="section-title">
+        <i class="fas fa-address-card section-icon"></i>
+        Contact Information
+      </h2>
       
-      <!-- Contact Information -->
-      <div class="contact-section" data-aos="fade-right">
-        <h2 class="section-title">
-          <i class="fas fa-address-card section-icon"></i>
-          Contact Information
-        </h2>
-        
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
         <div class="contact-item">
           <div class="contact-icon">
             <i class="fas fa-envelope"></i>
@@ -575,44 +488,7 @@
             <p>Central European Time (CET)<br>UTC+1 / UTC+2 (DST)</p>
           </div>
         </div>
-
       </div>
-
-      <!-- Quick Contact Form -->
-      <div class="contact-section" data-aos="fade-left">
-        <h2 class="section-title">
-          <i class="fas fa-paper-plane section-icon"></i>
-          Quick Message
-        </h2>
-        
-        <form class="contact-form" id="contactForm">
-          <div class="form-group">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@domain.com" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="subject" class="form-label">Subject</label>
-            <input type="text" class="form-control" id="subject" name="subject" placeholder="Brief subject line" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="message" class="form-label">Message</label>
-            <textarea class="form-control" id="message" name="message" placeholder="Your message here..." required></textarea>
-          </div>
-          
-          <button type="submit" class="btn-submit">
-            <i class="fas fa-rocket me-2"></i>Send Message
-          </button>
-        </form>
-
-      </div>
-
     </div>
 
     <!-- Social Links Section -->
@@ -748,50 +624,7 @@
       });
     });
 
-    // Contact form handling
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const submitBtn = this.querySelector('.btn-submit');
-      const originalText = submitBtn.innerHTML;
-      const name = this.querySelector('input[type="text"]').value;
-      const email = this.querySelector('input[type="email"]').value;
-      const message = this.querySelector('textarea').value;
-      
-      // Show loading state
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-      submitBtn.disabled = true;
-      
-      // Since this is a static website, we'll show a realistic message
-      setTimeout(() => {
-        submitBtn.innerHTML = '<i class="fas fa-info-circle me-2"></i>Demo Mode';
-        submitBtn.style.background = 'linear-gradient(45deg, #ffa500, #ff6b35)';
-        
-        // Show user-friendly message
-        alert(`Demo Mode: This is a portfolio demonstration.\n\nTo actually contact me, please email directly:\n📧 jackeygle@gmail.com\n\nYour message preview:\nName: ${name}\nEmail: ${email}\nMessage: ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`);
-        
-        // Reset form
-        this.reset();
-        
-        // Reset button after delay
-        setTimeout(() => {
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
-          submitBtn.style.background = '';
-        }, 4000);
-      }, 1500);
-    });
 
-    // Form field focus effects
-    document.querySelectorAll('.form-control').forEach(field => {
-      field.addEventListener('focus', function() {
-        this.parentElement.style.transform = 'scale(1.02)';
-      });
-      
-      field.addEventListener('blur', function() {
-        this.parentElement.style.transform = 'scale(1)';
-      });
-    });
 
     // Social link click tracking
     document.querySelectorAll('.social-link').forEach(link => {

@@ -138,7 +138,7 @@
             position: relative;
             margin-bottom: 2rem;
         }
-
+        
         #tetris-canvas {
             display: block;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
@@ -584,9 +584,9 @@
                 this.player.type = this.nextPiece.type;
                 this.player.matrix = this.nextPiece.matrix;
             } else {
-                const pieces = 'ILJOTSZ';
-                this.player.type = pieces[pieces.length * Math.random() | 0];
-                this.player.matrix = this.createPiece(this.player.type);
+            const pieces = 'ILJOTSZ';
+            this.player.type = pieces[pieces.length * Math.random() | 0];
+            this.player.matrix = this.createPiece(this.player.type);
             }
             
             this.player.pos.y = 0;
@@ -629,7 +629,7 @@
                     case 'KeyP':
                         this.pause();
                         break;
-                }
+            }
             });
         }
         
@@ -832,7 +832,7 @@
                 });
             });
         }
-
+        
         drawGrid() {
             this.grid.forEach((row, y) => {
                 row.forEach((value, x) => {
