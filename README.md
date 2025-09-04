@@ -10,8 +10,6 @@ A stunning AI-themed portfolio website showcasing expertise in **Artificial Inte
 
 **🌐 Visit the Portfolio**: [https://jackeysproject.web.app](https://jackeysproject.web.app)
 
-### 🎥 Demo Video
-- **Autonomous Robot Manipulation (Demo)**: [Watch video](https://private-user-images.githubusercontent.com/181642196/485529376-326d30b4-cb1c-4c25-ba8a-1e9456ae2177.mp4)
 
 ## ✨ Features
 
