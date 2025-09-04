@@ -4,6 +4,7 @@
   "description": "AI & Deep Learning Portfolio Website",
   "main": "index.js",
   "scripts": {
+    "start": "npx serve public -s -l $PORT",
     "dev": "npx serve public -s -l 3000",
     "build": "echo 'Static site - no build needed'",
     "deploy": "echo 'Deploy to Render'"
