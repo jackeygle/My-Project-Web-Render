@@ -10,6 +10,9 @@ A stunning AI-themed portfolio website showcasing expertise in **Artificial Inte
 
 **🌐 Visit the Portfolio**: [https://jackeysproject.web.app](https://jackeysproject.web.app)
 
+### 🎥 Demo Video
+- **Autonomous Robot Manipulation (Demo)**: [Watch video](https://private-user-images.githubusercontent.com/181642196/485529376-326d30b4-cb1c-4c25-ba8a-1e9456ae2177.mp4)
+
 ## ✨ Features
 
 ### 🧠 Neural Network Universe Background
@@ -129,33 +132,21 @@ open public/index.html
 python -m http.server 8000 -d public
 ```
 
-### Render Deployment
+### Render Deployment (Static Site)
 
-#### Option 1: Automatic Deployment (Recommended)
-1. Connect your GitHub repository to Render
-2. Render will automatically deploy on every push to main branch
-3. Your site will be available at: `https://your-app-name.onrender.com`
+#### Option 1: Automatic (Recommended)
+1. Create a Static Site on Render and connect this repo
+2. Publish directory: `public`
+3. Every push to `main` will auto-deploy
 
-#### Option 2: Manual Deployment
+#### Option 2: Node Web Service (alternative)
+If you prefer a Node service, set Start Command to `npm start` (binds `PORT`).
+
+### Local Development
 ```bash
-# Run the deployment script
-./deploy.sh
-
-# Or manually push to GitHub
-git add .
-git commit -m "Deploy to Render"
-git push origin main
-```
-
-#### Option 3: Local Development
-```bash
-# Install dependencies
+# Serve the static site locally
 npm install
-
-# Start local server
-npm run dev
-
-# Your site will be available at: http://localhost:3000
+npm run dev  # serves public/ at http://localhost:3000
 ```
 
 ## 🌟 Highlights
