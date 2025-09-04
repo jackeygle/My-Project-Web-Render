@@ -88,8 +88,9 @@ A stunning AI-themed portfolio website showcasing expertise in **Artificial Inte
 
 ### Development Tools
 - **Git**: Version control
-- **Firebase**: Hosting and file storage
+- **Render**: Cloud hosting and deployment
 - **GitHub**: Code repository and collaboration
+- **Docker**: Containerization for deployment
 
 ## 🎯 Key Sections
 
@@ -128,17 +129,33 @@ open public/index.html
 python -m http.server 8000 -d public
 ```
 
-### Firebase Deployment
+### Render Deployment
 
+#### Option 1: Automatic Deployment (Recommended)
+1. Connect your GitHub repository to Render
+2. Render will automatically deploy on every push to main branch
+3. Your site will be available at: `https://your-app-name.onrender.com`
+
+#### Option 2: Manual Deployment
 ```bash
-# Install Firebase CLI
-npm install -g firebase-tools
+# Run the deployment script
+./deploy.sh
 
-# Login to Firebase
-firebase login
+# Or manually push to GitHub
+git add .
+git commit -m "Deploy to Render"
+git push origin main
+```
 
-# Deploy to Firebase Hosting
-firebase deploy
+#### Option 3: Local Development
+```bash
+# Install dependencies
+npm install
+
+# Start local server
+npm run dev
+
+# Your site will be available at: http://localhost:3000
 ```
 
 ## 🌟 Highlights
@@ -182,8 +199,10 @@ My-Project-Web/
 │   ├── pathfinding-visualizer-game.html  # Algorithm visualizer
 │   └── static/
 │       └── images/             # Project images and assets
-├── firebase.json               # Firebase hosting configuration
-├── storage.rules              # Firebase storage rules
+├── render.yaml                # Render deployment configuration
+├── package.json               # Node.js dependencies and scripts
+├── Dockerfile                 # Docker configuration for deployment
+├── deploy.sh                  # Deployment script
 └── README.md                  # Project documentation
 ```
 

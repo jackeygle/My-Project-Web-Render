@@ -1,0 +1,27 @@
+{
+  "name": "ai-portfolio-website",
+  "version": "1.0.0",
+  "description": "AI & Deep Learning Portfolio Website",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx serve public -s -l 3000",
+    "dev": "npx serve public -s -l 3000",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "echo 'Deploy to Render'"
+  },
+  "keywords": [
+    "ai",
+    "portfolio",
+    "deep-learning",
+    "robotics",
+    "static-website"
+  ],
+  "author": "Xinle Zhang",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

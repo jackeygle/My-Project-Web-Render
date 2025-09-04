@@ -540,7 +540,7 @@
     <div class="status-bar" data-aos="fade-up" data-aos-delay="100">
       <div class="status-item">
         <div class="status-dot"></div>
-        <span>Auto-Updated Daily</span>
+        <span>Demo Version</span>
       </div>
       <div class="status-item">
         <i class="fas fa-clock me-1"></i>
@@ -651,7 +651,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>© 2025 Xinle Zhang // AI Insights // Powered by Automated Intelligence</p>
+      <p>© 2025 Xinle Zhang // AI Insights // Demo Portfolio Showcase</p>
     </div>
   </footer>
 
@@ -666,45 +666,66 @@
       offset: 100
     });
 
-    // Load AI Insights Data
-    async function loadAIInsights() {
-      try {
-        const response = await fetch('./data/today_ai_topics.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    // Load AI Insights Data (Static Demo Version)
+    function loadAIInsights() {
+      // Static demo data
+      const data = {
+        lastUpdated: new Date().toISOString(),
+        sourceCount: 12,
+        dateFormatted: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'long'
+        }),
+        summary: {
+          mainTopic: "Large model inference optimization and multimodal AI applications have become key focuses for 2025, with major tech companies releasing next-generation AI infrastructure solutions.",
+          keyInsights: [
+            "Inference acceleration technology becomes key breakthrough for reducing AI deployment costs",
+            "Multimodal large models demonstrate stronger generalization capabilities in real-world applications",
+            "Edge AI computing devices begin supporting more complex model inference tasks"
+          ],
+          trendAnalysis: "Current AI development focus shifts from model scale competition to efficiency and practicality optimization. The reduction in inference costs is accelerating the commercial application of AI technology, while the maturity of multimodal capabilities brings more natural human-computer interaction experiences to AI systems.",
+          futureImplications: "These advances will significantly lower the barriers to AI applications and drive digital transformation in more traditional industries. The development of edge intelligence will also bring new possibilities for IoT and automation systems."
+        },
+        techStats: {
+          modelsAnalyzed: 58,
+          researchPapers: 312,
+          codeCommits: 1456,
+          experimentsRun: 104
         }
-        
-        const data = await response.json();
-        
-        // Update status bar
-        document.getElementById('lastUpdated').textContent = new Date(data.lastUpdated).toLocaleString('en-US');
-        document.getElementById('sourceCount').textContent = data.sourceCount || 0;
-        document.getElementById('topicDate').textContent = data.dateFormatted;
-        
-        // Update main content
-        document.getElementById('mainTopic').textContent = data.summary.mainTopic;
-        
-        // Update key insights
-        const insightsContainer = document.getElementById('keyInsights');
-        insightsContainer.innerHTML = '';
-        data.summary.keyInsights.forEach(insight => {
-          const insightDiv = document.createElement('div');
-          insightDiv.className = 'insight-item';
-          insightDiv.textContent = insight;
-          insightsContainer.appendChild(insightDiv);
-        });
-        
-        // Update analysis sections
-        document.getElementById('trendAnalysis').textContent = data.summary.trendAnalysis;
-        document.getElementById('futureImplications').textContent = data.summary.futureImplications;
-        
-        // Update tech stats with counter animation
-        animateCounter('modelsAnalyzed', data.techStats.modelsAnalyzed);
-        animateCounter('researchPapers', data.techStats.researchPapers);
-        animateCounter('codeCommits', data.techStats.codeCommits);
-        animateCounter('experimentsRun', data.techStats.experimentsRun);
-        
-        // Hide loading and show content
+      };
+      
+      // Update status bar
+      document.getElementById('lastUpdated').textContent = new Date(data.lastUpdated).toLocaleString('en-US');
+      document.getElementById('sourceCount').textContent = data.sourceCount || 0;
+      document.getElementById('topicDate').textContent = data.dateFormatted;
+      
+      // Update main content
+      document.getElementById('mainTopic').textContent = data.summary.mainTopic;
+      
+      // Update key insights
+      const insightsContainer = document.getElementById('keyInsights');
+      insightsContainer.innerHTML = '';
+      data.summary.keyInsights.forEach(insight => {
+        const insightDiv = document.createElement('div');
+        insightDiv.className = 'insight-item';
+        insightDiv.textContent = insight;
+        insightsContainer.appendChild(insightDiv);
+      });
+      
+      // Update analysis sections
+      document.getElementById('trendAnalysis').textContent = data.summary.trendAnalysis;
+      document.getElementById('futureImplications').textContent = data.summary.futureImplications;
+      
+      // Update tech stats with counter animation
+      animateCounter('modelsAnalyzed', data.techStats.modelsAnalyzed);
+      animateCounter('researchPapers', data.techStats.researchPapers);
+      animateCounter('codeCommits', data.techStats.codeCommits);
+      animateCounter('experimentsRun', data.techStats.experimentsRun);
+      
+      // Hide loading and show content
+      setTimeout(() => {
         document.getElementById('mainTopicContent').style.display = 'none';
         document.getElementById('topicContent').style.display = 'block';
         
@@ -714,20 +735,7 @@
           document.getElementById('topicContent').style.transition = 'opacity 0.5s ease';
           document.getElementById('topicContent').style.opacity = '1';
         }, 100);
-        
-      } catch (error) {
-        console.error('Error loading AI insights:', error);
-        
-        // Show error state
-        document.getElementById('mainTopicContent').innerHTML = `
-          <div class="error-state">
-            <i class="fas fa-exclamation-triangle mb-3" style="font-size: 2rem;"></i>
-            <h4>Unable to load AI insights</h4>
-            <p>Please try refreshing the page or check back later.</p>
-            <small>Error: ${error.message}</small>
-          </div>
-        `;
-      }
+      }, 1500); // Simulate loading time
     }
 
     // Counter animation function
@@ -754,8 +762,7 @@
       updateCounter();
     }
 
-    // Auto-refresh every 4 hours
-    setInterval(loadAIInsights, 4 * 60 * 60 * 1000);
+    // No auto-refresh needed for static demo
 
     // Load data when page loads
     window.addEventListener('load', loadAIInsights);
