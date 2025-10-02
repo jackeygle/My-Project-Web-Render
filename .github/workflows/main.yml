@@ -27,12 +27,6 @@ jobs:
         npm init -y
         npm install axios cheerio @openai/openai dotenv
     
-    - name: Run AI topics update script
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: node scripts/update-ai-topics.js
-    
     - name: Configure git
       run: |
         git config --local user.email "action@github.com"
